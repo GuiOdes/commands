@@ -2,7 +2,8 @@ package br.com.sapiencia.command.model
 
 import java.util.UUID
 
-class CargoModel(
+data class LoginModel(
     val id: UUID? = null,
-    val nome: String
+    val usuario: String,
+    val senha: String
 )
