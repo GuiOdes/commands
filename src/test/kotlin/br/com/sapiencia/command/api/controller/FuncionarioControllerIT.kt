@@ -1,17 +1,14 @@
 package br.com.sapiencia.command.api.controller
 
 import br.com.sapiencia.command.api.FuncionarioResponse
-import br.com.sapiencia.command.builder.CargoBuilder
 import br.com.sapiencia.command.builder.CargoBuilder.cargoEntity
 import br.com.sapiencia.command.builder.FuncionarioBuilder.criarFuncionarioRequest
 import br.com.sapiencia.command.builder.LoginBuilder.loginRequest
 import br.com.sapiencia.command.common.IntegrationTests
-import br.com.sapiencia.command.database.entity.Cargo
 import br.com.sapiencia.command.database.repository.data.CargoJpaRepository
 import br.com.sapiencia.command.database.repository.data.FuncionarioJpaRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,16 +21,9 @@ class FuncionarioControllerIT(
     @Autowired private val funcionarioJpaRepository: FuncionarioJpaRepository
 ) : IntegrationTests() {
 
-    lateinit var cargo: Cargo
-
-    @BeforeEach
-    fun setup() {
-        cargo = cargoJpaRepository.findByNome(CargoBuilder.cargoModel().nome)
-            ?: cargoJpaRepository.save(cargoEntity(id = null))
-    }
-
     @Test
     fun `Deve salvar funcionarios em um mesmo cargo e criar seus logins no banco de dados`() {
+        val cargo = cargoJpaRepository.save(cargoEntity())
 
         val request = criarFuncionarioRequest(
             cargoName = cargo.nome
@@ -65,6 +55,7 @@ class FuncionarioControllerIT(
 
     @Test
     fun `Deve deletar um funcionario do banco de dados`() {
+        val cargo = cargoJpaRepository.save(cargoEntity())
 
         val request = criarFuncionarioRequest(
             cargoName = cargo.nome,
