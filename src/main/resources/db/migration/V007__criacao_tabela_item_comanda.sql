@@ -4,7 +4,8 @@ CREATE TABLE item_comanda
     comanda_id     UUID    NOT NULL REFERENCES comanda (id),
     quantidade     INTEGER NOT NULL,
     deletado       BOOLEAN NOT NULL DEFAULT FALSE,
-    funcionario_id UUID    NOT NULL REFERENCES funcionario (id)
+    funcionario_id UUID    NOT NULL REFERENCES funcionario (id),
+    PRIMARY KEY (produto_id, comanda_id)
 );
 
 COMMENT ON TABLE item_comanda IS 'Tabela que armazena os itens de uma comanda';
