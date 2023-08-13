@@ -1,5 +1,6 @@
 package br.com.sapiencia.command.database.entity
 
+import br.com.sapiencia.command.api.request.CriarFuncionarioRequest
 import br.com.sapiencia.command.enums.PrivilegioEnum
 import br.com.sapiencia.command.model.FuncionarioModel
 import jakarta.persistence.Entity
@@ -15,6 +16,7 @@ import org.hibernate.annotations.Cascade
 import org.hibernate.annotations.CascadeType
 import org.hibernate.annotations.GenericGenerator
 import org.hibernate.annotations.SQLDelete
+import org.hibernate.annotations.Where
 import java.util.UUID
 
 @Entity
@@ -22,7 +24,7 @@ import java.util.UUID
 @SQLDelete(
     sql = "UPDATE funcionario SET deletado = true WHERE id = ? AND deletado = false"
 )
-// @Where(clause = "deletado=false")
+@Where(clause = "deletado=false")
 data class Funcionario(
     @Id
     @GeneratedValue(generator = "uuid-hibernate-generator")
@@ -50,8 +52,8 @@ data class Funcionario(
 
     @OneToOne
     @JoinColumn(name = "login_id")
-    @Cascade(CascadeType.PERSIST)
-    val login: Login,
+    @Cascade(CascadeType.ALL)
+    val login: Login
 ) {
 
     fun toModel() = FuncionarioModel(
@@ -81,6 +83,20 @@ data class Funcionario(
             cargo = Cargo.of(funcionarioModel.cargo),
             privilegio = funcionarioModel.privilegio,
             login = Login.of(funcionarioModel.login)
+        )
+
+        fun of(
+            request: CriarFuncionarioRequest,
+            cargo: Cargo
+        ) = Funcionario(
+            matricula = request.matricula,
+            nome = request.nome,
+            cpf = request.cpf,
+            telefone = request.telefone,
+            email = request.email,
+            cargo = cargo,
+            privilegio = PrivilegioEnum.COMUM,
+            login = Login.of(request.loginRequest)
         )
     }
 }

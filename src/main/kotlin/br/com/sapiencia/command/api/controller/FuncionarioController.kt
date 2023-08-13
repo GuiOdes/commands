@@ -1,7 +1,7 @@
 package br.com.sapiencia.command.api.controller
 
-import br.com.sapiencia.command.model.FuncionarioModel
-import br.com.sapiencia.command.service.implementation.FuncionarioServiceImpl
+import br.com.sapiencia.command.api.request.CriarFuncionarioRequest
+import br.com.sapiencia.command.service.FuncionarioService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -15,14 +15,14 @@ import java.util.UUID
 @RestController
 @RequestMapping("/funcionario")
 class FuncionarioController(
-    private val funcionarioServiceImpl: FuncionarioServiceImpl
+    private val funcionarioService: FuncionarioService
 ) {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun salvar(@RequestBody funcionarioModel: FuncionarioModel) = funcionarioServiceImpl.save(funcionarioModel)
+    fun salvar(@RequestBody request: CriarFuncionarioRequest) = funcionarioService.save(request)
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deletarPorId(@PathVariable id: UUID) = funcionarioServiceImpl.deleteById(id)
+    fun deletarPorId(@PathVariable id: UUID) = funcionarioService.deleteById(id)
 }

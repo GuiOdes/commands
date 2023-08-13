@@ -1,6 +1,7 @@
 package br.com.sapiencia.command.database.entity
 
 import br.com.sapiencia.command.model.CargoModel
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
@@ -15,6 +16,8 @@ class Cargo(
     @GeneratedValue(generator = "uuid-hibernate-generator")
     @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
     val id: UUID? = null,
+
+    @Column(unique = true)
     val nome: String
 ) {
 
