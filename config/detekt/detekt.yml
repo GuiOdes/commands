@@ -118,7 +118,7 @@ complexity:
     active: true
     threshold: 65
   LongParameterList:
-    excludes: [ ]
+    excludes: [ "**/test/**" ]
     active: true
     functionThreshold: 6
     constructorThreshold: 17
