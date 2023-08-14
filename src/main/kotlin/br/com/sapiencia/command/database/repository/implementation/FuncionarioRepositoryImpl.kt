@@ -15,11 +15,11 @@ class FuncionarioRepositoryImpl(
     private val funcionarioJpaRepository: FuncionarioJpaRepository,
     private val cargoJpaRepository: CargoJpaRepository
 ) : FuncionarioRepository {
-    override fun save(
+    override fun salvar(
         request: CriarFuncionarioRequest
     ) = cargoJpaRepository.findByNome(request.cargoName)?.let {
         funcionarioJpaRepository.save(Funcionario.of(request, it))
     }?.toModel() ?: throw NotFoundException(Cargo::class)
 
-    override fun deleteById(id: UUID) = funcionarioJpaRepository.deleteById(id)
+    override fun deletarPorId(id: UUID) = funcionarioJpaRepository.deleteById(id)
 }

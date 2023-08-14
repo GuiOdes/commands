@@ -1,5 +1,6 @@
 package br.com.sapiencia.command.database.entity
 
+import br.com.sapiencia.command.model.MesaModel
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
@@ -11,4 +12,14 @@ data class Mesa(
     @Id
     @GeneratedValue
     val id: Long
-)
+) {
+    fun toModel() = MesaModel(
+        id = id
+    )
+
+    companion object {
+        fun of(mesaModel: MesaModel) = Mesa(
+            id = mesaModel.id
+        )
+    }
+}
