@@ -2,7 +2,6 @@ package br.com.sapiencia.command.database.entity
 
 import br.com.sapiencia.command.model.MesaModel
 import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 
@@ -10,7 +9,6 @@ import jakarta.persistence.Table
 @Table(name = "mesa")
 data class Mesa(
     @Id
-    @GeneratedValue
     val id: Long
 ) {
     fun toModel() = MesaModel(
