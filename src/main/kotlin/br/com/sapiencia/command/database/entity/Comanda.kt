@@ -4,6 +4,7 @@ import br.com.sapiencia.command.api.response.ComandaResponse
 import br.com.sapiencia.command.api.response.ProdutoResponse
 import br.com.sapiencia.command.model.ComandaModel
 import br.com.sapiencia.command.model.ProdutoModel
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
@@ -15,6 +16,7 @@ import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.GenericGenerator
+import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.util.UUID
 
@@ -30,7 +32,7 @@ data class Comanda(
     val nomeResponsavel: String,
 
     @ManyToOne
-    @JoinColumn(name = "mesa_id")
+    @JoinColumn(name = "numero_mesa")
     val mesa: Mesa,
 
     val ativa: Boolean = true,
@@ -39,10 +41,10 @@ data class Comanda(
     @CreationTimestamp
     val dataCriacao: LocalDateTime = LocalDateTime.now(),
 
-    @OneToMany(mappedBy = "id.comanda", fetch = FetchType.LAZY)
-    val listaItens: List<ItemComanda> = emptyList()
+    @OneToMany(mappedBy = "id.comanda", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    val listaItens: MutableList<ItemComanda>? = mutableListOf()
 ) {
-    private val valorTotal get() = listaItens.sumOf { it.valorTotal }
+    private val valorTotal: BigDecimal get() = listaItens?.sumOf { it.valorTotal } ?: BigDecimal.ZERO
 
     fun toResponse(
         listaProdutos: List<ProdutoModel>

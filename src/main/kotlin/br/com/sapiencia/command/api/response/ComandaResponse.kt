@@ -11,7 +11,7 @@ data class ComandaResponse(
     val nomeResponsavel: String,
     val numeroMesa: Long,
     val dataCriacao: LocalDateTime = LocalDateTime.now(),
-    val listaProdutos: List<ProdutoResponse>,
+    val listaProdutos: List<ProdutoResponse>? = emptyList(),
     val valorTotal: BigDecimal,
     val ativa: Boolean
 ) {
