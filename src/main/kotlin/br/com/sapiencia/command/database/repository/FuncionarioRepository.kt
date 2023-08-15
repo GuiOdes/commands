@@ -5,6 +5,6 @@ import br.com.sapiencia.command.model.FuncionarioModel
 import java.util.UUID
 
 interface FuncionarioRepository {
-    fun save(request: CriarFuncionarioRequest): FuncionarioModel
-    fun deleteById(id: UUID)
+    fun salvar(request: CriarFuncionarioRequest): FuncionarioModel
+    fun deletarPorId(id: UUID)
 }

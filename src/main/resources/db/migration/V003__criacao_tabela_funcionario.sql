@@ -12,25 +12,14 @@ CREATE TABLE funcionario
     login_id   UUID           NOT NULL REFERENCES login (id)
 );
 
-COMMENT
-ON TABLE funcionario IS 'Tabela de funcionários do sistema';
-COMMENT
-ON COLUMN funcionario.id IS 'Identificador do funcionario';
-COMMENT
-ON COLUMN funcionario.matricula IS 'Matricula do funcionario';
-COMMENT
-ON COLUMN funcionario.nome IS 'Matricula do funcionario';
-COMMENT
-ON COLUMN funcionario.cpf IS 'Matricula do funcionario';
-COMMENT
-ON COLUMN funcionario.telefone IS 'Matricula do funcionario';
-COMMENT
-ON COLUMN funcionario.email IS 'Matricula do funcionario';
-COMMENT
-ON COLUMN funcionario.deletado IS 'Matricula do funcionario';
-COMMENT
-ON COLUMN funcionario.cargo_id IS 'Matricula do funcionario';
-COMMENT
-ON COLUMN funcionario.privilegio IS 'Matricula do funcionario';
-COMMENT
-ON COLUMN funcionario.login_id IS 'Matricula do funcionario';
+COMMENT ON TABLE funcionario IS 'Tabela de funcionários do sistema';
+COMMENT ON COLUMN funcionario.id IS 'Identificador do funcionario';
+COMMENT ON COLUMN funcionario.matricula IS 'Matricula do funcionario';
+COMMENT ON COLUMN funcionario.nome IS 'Nome do funcionário';
+COMMENT ON COLUMN funcionario.cpf IS 'CPF do funcionário';
+COMMENT ON COLUMN funcionario.telefone IS 'Telefone do funcionário';
+COMMENT ON COLUMN funcionario.email IS 'Email do funcionário';
+COMMENT ON COLUMN funcionario.deletado IS 'Flag de exclusão lógica do funcionário';
+COMMENT ON COLUMN funcionario.cargo_id IS 'Identificador do cargo do funcionário';
+COMMENT ON COLUMN funcionario.privilegio IS 'Nível de acesso do funcionário';
+COMMENT ON COLUMN funcionario.login_id IS 'Identificador do login do funcionário';

@@ -10,7 +10,7 @@ import java.util.UUID
 class FuncionarioServiceImpl(
     private val repository: FuncionarioRepository
 ) : FuncionarioService {
-    override fun save(request: CriarFuncionarioRequest) = repository.save(request).toResponse()
+    override fun save(request: CriarFuncionarioRequest) = repository.salvar(request).toResponse()
 
-    override fun deleteById(id: UUID) = repository.deleteById(id)
+    override fun deleteById(id: UUID) = repository.deletarPorId(id)
 }
