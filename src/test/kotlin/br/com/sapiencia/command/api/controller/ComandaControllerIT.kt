@@ -1,5 +1,6 @@
 package br.com.sapiencia.command.api.controller
 
+import br.com.sapiencia.command.api.request.PeriodoDeDatasRequest
 import br.com.sapiencia.command.api.response.ComandaResponse
 import br.com.sapiencia.command.builder.CargoBuilder.cargoEntity
 import br.com.sapiencia.command.builder.ComandaBuilder
@@ -19,8 +20,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.TestRestTemplate
-import java.math.MathContext
-import java.math.RoundingMode.UP
 
 class ComandaControllerIT(
     @Autowired private val testRestTemplate: TestRestTemplate,
@@ -79,8 +78,46 @@ class ComandaControllerIT(
         )
     }
 
+    @Test
+    fun `Deve procurar a comanda ativa pelo numero de uma mesa`() {
+        val mesa = mesaJpaRepository.save(mesaEntity())
+        val comanda = comandaJpaRepository.save(comandaEntity(mesa = mesa))
+        val response = testRestTemplate.getForEntity(
+            "$BASE_URL/mesa?mesa=${mesa.id}",
+            ComandaResponse::class.java
+        )
+
+        assertAll(
+            { assertThat(response.body?.id).isEqualTo(comanda.id) },
+            { assertThat(response.body?.numeroMesa).isEqualTo(mesa.id) },
+            { assertThat(response.body?.nomeResponsavel).isEqualTo(comanda.nomeResponsavel) },
+            { assertThat(response.body?.ativa).isTrue() }
+        )
+    }
+
+    @Test
+    fun `Deve procurar comandas de um periodo de datas`() {
+        val mesa = mesaJpaRepository.save(mesaEntity())
+        val comandas = listOf(
+            comandaJpaRepository.save(comandaEntity(mesa = mesa)),
+            comandaJpaRepository.save(comandaEntity(mesa = mesa))
+        )
+        val request = PeriodoDeDatasRequest(
+            dataInicial = comandas.first().dataCriacao.minusDays(1),
+            dataFinal = comandas.last().dataCriacao.plusDays(1)
+        )
+        val response = testRestTemplate.getForEntity(
+            "$BASE_URL/periodo?dataInicial=${request.dataInicial}&dataFinal=${request.dataFinal}",
+            Array<ComandaResponse>::class.java
+        )
+
+        assertAll(
+            { assertThat(response.statusCode.is2xxSuccessful) },
+            { assertThat(response.body?.size).isEqualTo(2) }
+        )
+    }
+
     companion object {
         const val BASE_URL = "/comanda"
-        val roundingMathContext = MathContext(2, UP)
     }
 }
