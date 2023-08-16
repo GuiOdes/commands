@@ -75,4 +75,8 @@ class ComandaRepositoryImpl(
             comandaSalva.toResponse(listaProdutos)
         }
     }
+
+    override fun existeComandaAtivaPorMesa(mesa: Long): Boolean {
+        return comandaJpaRepository.existsByMesaId(mesa)
+    }
 }

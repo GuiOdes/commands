@@ -11,4 +11,5 @@ interface ComandaService {
     fun inserirProduto(inserirProdutoRequest: InserirProdutoRequest): ComandaResponse
     fun procurarAtivaPorMesa(mesa: Long): ComandaResponse?
     fun procurarPorPeriodo(dataInicial: LocalDateTime, dataFinal: LocalDateTime): List<ComandaModel>
+    fun existeComandaAtivaPorMesa(mesa: Long): Boolean
 }

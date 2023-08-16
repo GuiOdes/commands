@@ -25,4 +25,8 @@ class ComandaServiceImpl(
     override fun procurarPorPeriodo(dataInicial: LocalDateTime, dataFinal: LocalDateTime): List<ComandaModel> {
         return comandaRepository.procurarPorPeriodo(dataInicial, dataFinal)
     }
+
+    override fun existeComandaAtivaPorMesa(mesa: Long): Boolean {
+        return comandaRepository.existeComandaAtivaPorMesa(mesa)
+    }
 }

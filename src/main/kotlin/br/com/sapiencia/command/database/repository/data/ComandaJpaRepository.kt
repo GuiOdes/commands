@@ -8,4 +8,5 @@ import java.util.UUID
 interface ComandaJpaRepository : JpaRepository<Comanda, UUID> {
     fun findByMesaIdAndAtivaIsTrue(mesaId: Long): Comanda?
     fun findAllByDataCriacaoBetween(dataInicial: LocalDateTime, dataFinal: LocalDateTime): List<Comanda>
+    fun existsByMesaId(mesa: Long): Boolean
 }

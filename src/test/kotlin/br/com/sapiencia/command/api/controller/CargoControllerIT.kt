@@ -29,7 +29,7 @@ class CargoControllerIT(
     @Test
     fun `Deve listar todos os cargos`() {
         cargoJpaRepository.save(CargoBuilder.cargoEntity())
-        val response = testRestTemplate.getForEntity("/cargo/listar", List::class.java)
+        val response = testRestTemplate.getForEntity(BASE_URL, Array<CargoModel>::class.java)
 
         assertAll(
             { Assertions.assertNotNull(response.body) }
