@@ -8,9 +8,9 @@ import org.testcontainers.containers.PostgreSQLContainer
 class CustomPostgresContainer : PostgreSQLContainer<CustomPostgresContainer>("postgres:14-alpine"), TestConfiguration {
 
     init {
-        withUsername("root")
-        withPassword("root")
-        withDatabaseName("commands")
+        withUsername("app_command")
+        withPassword("app_command")
+        withDatabaseName("command")
 
         start()
 

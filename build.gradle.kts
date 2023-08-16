@@ -36,6 +36,7 @@ dependencies {
 	detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.21.0")
 	testImplementation("io.mockk:mockk:1.13.3")
 	testImplementation("com.ninja-squad:springmockk:4.0.0")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 }
 
 detekt {

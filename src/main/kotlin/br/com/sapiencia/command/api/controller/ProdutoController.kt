@@ -1,9 +1,11 @@
 package br.com.sapiencia.command.api.controller
 
+import br.com.sapiencia.command.api.request.AlterarEstoqueProdutoRequest
 import br.com.sapiencia.command.api.request.ProdutoRequest
 import br.com.sapiencia.command.service.ProdutoService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -19,4 +21,8 @@ class ProdutoController(
 
     @PostMapping
     fun salvar(@RequestBody produtoRequest: ProdutoRequest) = produtoService.salvar(produtoRequest)
+
+    @PutMapping
+    fun alterarEstoque(@RequestBody alterarEstoqueProdutoRequest: AlterarEstoqueProdutoRequest) =
+        produtoService.alterarEstoque(alterarEstoqueProdutoRequest)
 }
