@@ -83,7 +83,7 @@ class ComandaControllerIT(
         val mesa = mesaJpaRepository.save(mesaEntity())
         val comanda = comandaJpaRepository.save(comandaEntity(mesa = mesa))
         val response = testRestTemplate.getForEntity(
-            "$BASE_URL/mesa?mesa=${mesa.id}",
+            "$BASE_URL/${mesa.id}",
             ComandaResponse::class.java
         )
 
