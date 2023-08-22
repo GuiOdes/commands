@@ -17,6 +17,9 @@ import org.hibernate.annotations.CascadeType
 import org.hibernate.annotations.GenericGenerator
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.Where
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
 import java.util.UUID
 
 @Entity
@@ -54,7 +57,7 @@ data class Funcionario(
     @JoinColumn(name = "login_id")
     @Cascade(CascadeType.ALL)
     val login: Login
-) {
+) : UserDetails {
 
     fun toModel() = FuncionarioModel(
         id = id,
@@ -99,4 +102,20 @@ data class Funcionario(
             login = Login.of(request.loginRequest)
         )
     }
+
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
+        return mutableListOf(SimpleGrantedAuthority(privilegio.name))
+    }
+
+    override fun getPassword() = login.senha
+
+    override fun getUsername() = cpf
+
+    override fun isAccountNonExpired() = true
+
+    override fun isAccountNonLocked() = true
+
+    override fun isCredentialsNonExpired() = true
+
+    override fun isEnabled() = true
 }

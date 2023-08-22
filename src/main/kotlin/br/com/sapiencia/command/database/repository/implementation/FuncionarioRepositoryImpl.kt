@@ -22,4 +22,5 @@ class FuncionarioRepositoryImpl(
     }?.toModel() ?: throw NotFoundException(Cargo::class)
 
     override fun deletarPorId(id: UUID) = funcionarioJpaRepository.deleteById(id)
+    override fun procurarPeloDocumento(cpf: String) = funcionarioJpaRepository.findByCpf(cpf)
 }

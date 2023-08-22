@@ -7,3 +7,8 @@ spring:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5434/command}
     username: ${SPRING_DATASOURCE_USERNAME:app_command}
     password: ${SPRING_DATASOURCE_PASSWORD:app_command}
+
+security-configurations:
+  jwt:
+    secret: ${JWT_SECRET:77397A24432646294A404E635266556A586E3272357538782F4125442A472D4B}
+    expiration: ${JWT_EXPIRATION:720000}
