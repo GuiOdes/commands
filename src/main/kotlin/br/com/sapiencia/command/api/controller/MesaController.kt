@@ -4,6 +4,7 @@ import br.com.sapiencia.command.api.response.MesaResponse
 import br.com.sapiencia.command.model.MesaModel
 import br.com.sapiencia.command.service.MesaService
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -24,4 +25,6 @@ class MesaController(
     fun procurarPorId(@PathVariable id: Long): MesaResponse {
         return mesaService.procurarPorId(id)
     }
+    @DeleteMapping("/{id}")
+    fun deletarMesa(@PathVariable id: Long) = mesaService.deletarPorId(id)
 }

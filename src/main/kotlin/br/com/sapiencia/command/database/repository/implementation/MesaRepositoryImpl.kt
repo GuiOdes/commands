@@ -13,4 +13,5 @@ class MesaRepositoryImpl(
     override fun salvar(mesaModel: MesaModel) = mesaJpaRepository.save(Mesa.of(mesaModel)).toModel()
 
     override fun procurarPorId(id: Long) = mesaJpaRepository.findById(id).orElse(null)?.toModel()
+    override fun deletarPorID(id: Long) = mesaJpaRepository.deleteById(id)
 }

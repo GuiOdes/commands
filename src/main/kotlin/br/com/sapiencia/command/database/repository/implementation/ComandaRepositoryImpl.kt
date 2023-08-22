@@ -11,7 +11,7 @@ import br.com.sapiencia.command.database.repository.ProdutoRepository
 import br.com.sapiencia.command.database.repository.data.ComandaJpaRepository
 import br.com.sapiencia.command.database.repository.data.FuncionarioJpaRepository
 import br.com.sapiencia.command.database.repository.data.ItemComandaJpaRepository
-import br.com.sapiencia.command.exception.NotFoundException
+import br.com.sapiencia.command.exception.NaoEncontradoException
 import br.com.sapiencia.command.model.ComandaModel
 import br.com.sapiencia.command.model.OperacaoProdutoEnum.DIMINUIR
 import org.springframework.stereotype.Component
@@ -41,13 +41,13 @@ class ComandaRepositoryImpl(
 
     override fun inserirProduto(inserirProdutoRequest: InserirProdutoRequest): ComandaResponse {
         val comanda = comandaJpaRepository.findById(inserirProdutoRequest.comandaId)
-            .orElseThrow { NotFoundException(Comanda::class) }
+            .orElseThrow { NaoEncontradoException(Comanda::class) }
 
         val produto = produtoRepository.procurarPorId(inserirProdutoRequest.produtoId)
-            ?: throw NotFoundException(Produto::class)
+            ?: throw NaoEncontradoException(Produto::class)
 
         val funcionario = funcionarioJpaRepository.findById(inserirProdutoRequest.funcionarioId)
-            .orElseThrow { NotFoundException(Funcionario::class) }
+            .orElseThrow { NaoEncontradoException(Funcionario::class) }
 
         val itemComanda = itemComandaJpaRepository.save(
             ItemComanda.of(

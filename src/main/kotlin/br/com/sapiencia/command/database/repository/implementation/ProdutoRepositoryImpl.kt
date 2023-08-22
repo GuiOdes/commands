@@ -3,7 +3,7 @@ package br.com.sapiencia.command.database.repository.implementation
 import br.com.sapiencia.command.database.entity.Produto
 import br.com.sapiencia.command.database.repository.ProdutoRepository
 import br.com.sapiencia.command.database.repository.data.ProdutoJpaRepository
-import br.com.sapiencia.command.exception.NotFoundException
+import br.com.sapiencia.command.exception.NaoEncontradoException
 import br.com.sapiencia.command.model.OperacaoProdutoEnum
 import br.com.sapiencia.command.model.OperacaoProdutoEnum.AUMENTAR
 import br.com.sapiencia.command.model.OperacaoProdutoEnum.DIMINUIR
@@ -19,7 +19,7 @@ class ProdutoRepositoryImpl(
 
     override fun listarTodos() = produtoJpaRepository.findAll().map { it.toModel() }
     override fun procurarPorId(produtoId: UUID) = produtoJpaRepository.findById(produtoId).orElseThrow {
-        NotFoundException(Produto::class)
+        NaoEncontradoException(Produto::class)
     }.toModel()
 
     override fun alterarEstoque(
@@ -34,5 +34,5 @@ class ProdutoRepositoryImpl(
         }
 
         produtoJpaRepository.save(produto.copy(estoque = novaQuantidade)).toModel()
-    } ?: throw NotFoundException(Produto::class)
+    } ?: throw NaoEncontradoException(Produto::class)
 }

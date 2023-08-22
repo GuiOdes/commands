@@ -1,4 +1,5 @@
 package br.com.sapiencia.command.api.controller
+import br.com.sapiencia.command.api.request.AlterarCargoRequest
 import br.com.sapiencia.command.builder.CargoBuilder
 import br.com.sapiencia.command.builder.CargoBuilder.criarCargoRequest
 import br.com.sapiencia.command.common.IntegrationTests
@@ -33,6 +34,23 @@ class CargoControllerIT(
 
         assertAll(
             { Assertions.assertNotNull(response.body) }
+        )
+    }
+    @Test
+    fun `Deve editar um cargo`() {
+        val cargo = cargoJpaRepository.save(
+            CargoBuilder.cargoEntity(
+                nome = "Garsson"
+            )
+        )
+        val request = AlterarCargoRequest(
+            id = cargo.id!!,
+            nome = "Garçon"
+        )
+        testRestTemplate.put(BASE_URL, request, CargoModel::class.java)
+        val cargo2 = cargoJpaRepository.findById(cargo.id!!).get()
+        assertAll(
+            { Assertions.assertEquals(cargo2.nome, request.nome) }
         )
     }
     companion object {

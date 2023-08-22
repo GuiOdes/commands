@@ -6,7 +6,7 @@ import br.com.sapiencia.command.database.entity.Funcionario
 import br.com.sapiencia.command.database.repository.FuncionarioRepository
 import br.com.sapiencia.command.database.repository.data.CargoJpaRepository
 import br.com.sapiencia.command.database.repository.data.FuncionarioJpaRepository
-import br.com.sapiencia.command.exception.NotFoundException
+import br.com.sapiencia.command.exception.NaoEncontradoException
 import org.springframework.stereotype.Component
 import java.util.UUID
 
@@ -19,7 +19,7 @@ class FuncionarioRepositoryImpl(
         request: CriarFuncionarioRequest
     ) = cargoJpaRepository.findByNome(request.cargoName)?.let {
         funcionarioJpaRepository.save(Funcionario.of(request, it))
-    }?.toModel() ?: throw NotFoundException(Cargo::class)
+    }?.toModel() ?: throw NaoEncontradoException(Cargo::class)
 
     override fun deletarPorId(id: UUID) = funcionarioJpaRepository.deleteById(id)
 }

@@ -3,7 +3,8 @@ package br.com.sapiencia.command.service.implementation
 import br.com.sapiencia.command.api.response.MesaResponse
 import br.com.sapiencia.command.database.entity.Mesa
 import br.com.sapiencia.command.database.repository.MesaRepository
-import br.com.sapiencia.command.exception.NotFoundException
+import br.com.sapiencia.command.exception.NaoEncontradoException
+import br.com.sapiencia.command.exception.OperacaoInvalidaException
 import br.com.sapiencia.command.model.MesaModel
 import br.com.sapiencia.command.service.ComandaService
 import br.com.sapiencia.command.service.MesaService
@@ -17,7 +18,12 @@ class MesaServiceImpl(
     override fun salvar(mesaModel: MesaModel) = mesaRepository.salvar(mesaModel)
 
     override fun procurarPorId(id: Long): MesaResponse {
-        val mesa = mesaRepository.procurarPorId(id) ?: throw NotFoundException(Mesa::class)
+        val mesa = mesaRepository.procurarPorId(id) ?: throw NaoEncontradoException(Mesa::class)
         return MesaResponse(mesa.id, comandaService.existeComandaAtivaPorMesa(id))
+    }
+
+    override fun deletarPorId(id: Long) {
+        if (comandaService.existeComandaAtivaPorMesa(id)) throw OperacaoInvalidaException()
+        return mesaRepository.deletarPorID(id)
     }
 }

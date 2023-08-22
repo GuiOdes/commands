@@ -42,6 +42,18 @@ class MesaControllerIT(
             { assertNotNull(response.body) }
         )
     }
+    @Test
+    fun `Deve deletar mesa por id`() {
+        val mesa = mesaJpaRepository.save(MesaBuilder.mesaEntity())
+        val mesa2 = mesaJpaRepository.save(MesaBuilder.mesaEntity(id = 2))
+        comandaJpaRepository.save(ComandaBuilder.comandaEntity(mesa = mesa2))
+        testRestTemplate.delete("$BASE_URL/${mesa.id}")
+        testRestTemplate.delete("$BASE_URL/${mesa2.id}")
+        assertAll(
+            { assertTrue(!mesaJpaRepository.existsById(mesa.id)) },
+            { assertTrue(mesaJpaRepository.existsById(mesa2.id)) },
+        )
+    }
     companion object {
         const val BASE_URL = "/mesa"
     }
