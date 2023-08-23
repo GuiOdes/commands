@@ -18,7 +18,7 @@ class FuncionarioController(
     private val funcionarioService: FuncionarioService
 ) {
 
-    @PostMapping
+    @PostMapping("/cadastro")
     @ResponseStatus(HttpStatus.CREATED)
     fun salvar(@RequestBody request: CriarFuncionarioRequest) = funcionarioService.save(request)
 

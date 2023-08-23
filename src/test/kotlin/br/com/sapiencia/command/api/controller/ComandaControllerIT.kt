@@ -6,20 +6,26 @@ import br.com.sapiencia.command.builder.CargoBuilder.cargoEntity
 import br.com.sapiencia.command.builder.ComandaBuilder
 import br.com.sapiencia.command.builder.ComandaBuilder.comandaEntity
 import br.com.sapiencia.command.builder.ComandaBuilder.comandaRequest
+import br.com.sapiencia.command.builder.FuncionarioBuilder.funcionarioAuthEntity
 import br.com.sapiencia.command.builder.FuncionarioBuilder.funcionarioEntity
 import br.com.sapiencia.command.builder.MesaBuilder.mesaEntity
 import br.com.sapiencia.command.builder.ProdutoBuilder.produtoEntity
+import br.com.sapiencia.command.common.AuthUtils.httpEntityOf
 import br.com.sapiencia.command.common.IntegrationTests
+import br.com.sapiencia.command.configurations.security.JwtService
 import br.com.sapiencia.command.database.repository.data.CargoJpaRepository
 import br.com.sapiencia.command.database.repository.data.ComandaJpaRepository
 import br.com.sapiencia.command.database.repository.data.FuncionarioJpaRepository
 import br.com.sapiencia.command.database.repository.data.MesaJpaRepository
 import br.com.sapiencia.command.database.repository.data.ProdutoJpaRepository
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.http.HttpMethod.GET
+import org.springframework.http.HttpMethod.POST
 
 class ComandaControllerIT(
     @Autowired private val testRestTemplate: TestRestTemplate,
@@ -27,15 +33,30 @@ class ComandaControllerIT(
     @Autowired private val mesaJpaRepository: MesaJpaRepository,
     @Autowired private val funcionarioJpaRepository: FuncionarioJpaRepository,
     @Autowired private val produtoJpaRepository: ProdutoJpaRepository,
-    @Autowired private val cargoJpaRepository: CargoJpaRepository
+    @Autowired private val cargoJpaRepository: CargoJpaRepository,
+    @Autowired private val jwtService: JwtService
 ) : IntegrationTests() {
+
+    private lateinit var token: String
+
+    @BeforeEach
+    fun setup() {
+        val cargo = cargoJpaRepository.save(cargoEntity(nome = "AUTH_ONLY"))
+        val funcionario = funcionarioJpaRepository.save(funcionarioAuthEntity(cargo = cargo))
+        token = jwtService.generateToken(funcionario).authToken
+    }
 
     @Test
     fun `Deve criar uma nova comanda no banco de dados`() {
         val mesaSalva = mesaJpaRepository.save(mesaEntity())
         val request = comandaRequest(numeroMesa = mesaSalva.id)
 
-        testRestTemplate.postForEntity(BASE_URL, request, ComandaResponse::class.java)
+        testRestTemplate.exchange(
+            BASE_URL,
+            POST,
+            httpEntityOf(request, token),
+            ComandaResponse::class.java
+        )
 
         assertAll(
             { assertThat(comandaJpaRepository.count()).isEqualTo(1) },
@@ -61,9 +82,10 @@ class ComandaControllerIT(
             quantidade = 1
         )
 
-        val response = testRestTemplate.postForEntity(
+        val response = testRestTemplate.exchange(
             "$BASE_URL/inserir-produto",
-            request,
+            POST,
+            httpEntityOf(request, token),
             ComandaResponse::class.java
         )
 
@@ -82,8 +104,10 @@ class ComandaControllerIT(
     fun `Deve procurar a comanda ativa pelo numero de uma mesa`() {
         val mesa = mesaJpaRepository.save(mesaEntity())
         val comanda = comandaJpaRepository.save(comandaEntity(mesa = mesa))
-        val response = testRestTemplate.getForEntity(
+        val response = testRestTemplate.exchange(
             "$BASE_URL/${mesa.id}",
+            GET,
+            httpEntityOf(null, token),
             ComandaResponse::class.java
         )
 
@@ -106,8 +130,10 @@ class ComandaControllerIT(
             dataInicial = comandas.first().dataCriacao.minusDays(1),
             dataFinal = comandas.last().dataCriacao.plusDays(1)
         )
-        val response = testRestTemplate.getForEntity(
+        val response = testRestTemplate.exchange(
             "$BASE_URL/periodo?dataInicial=${request.dataInicial}&dataFinal=${request.dataFinal}",
+            GET,
+            httpEntityOf(null, token),
             Array<ComandaResponse>::class.java
         )
 
