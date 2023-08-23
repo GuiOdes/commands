@@ -81,4 +81,28 @@ object FuncionarioBuilder {
         privilegio = privilegio,
         login = login
     )
+
+    fun funcionarioAuthEntity(
+        id: UUID? = null,
+        nome: String = "Funcionario Teste",
+        deletado: Boolean = false,
+        cargo: Cargo = cargoEntity(),
+        privilegio: PrivilegioEnum = PrivilegioEnum.COMUM,
+        matricula: String = "AUTH",
+        telefone: String = "AUTH",
+        email: String = "AUTH@AUTH.COM",
+        cpf: String = "63010640030",
+        login: Login = loginEntity(usuario = "AUTH")
+    ) = Funcionario(
+        id = id,
+        nome = nome,
+        deletado = deletado,
+        cargo = cargo,
+        privilegio = privilegio,
+        matricula = matricula,
+        telefone = telefone,
+        email = email,
+        cpf = cpf,
+        login = login
+    )
 }

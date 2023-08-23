@@ -2,24 +2,39 @@ package br.com.sapiencia.command.api.controller
 
 import br.com.sapiencia.command.api.FuncionarioResponse
 import br.com.sapiencia.command.builder.CargoBuilder.cargoEntity
+import br.com.sapiencia.command.builder.FuncionarioBuilder
 import br.com.sapiencia.command.builder.FuncionarioBuilder.criarFuncionarioRequest
 import br.com.sapiencia.command.builder.LoginBuilder.loginRequest
+import br.com.sapiencia.command.common.AuthUtils.httpEntityOf
 import br.com.sapiencia.command.common.IntegrationTests
+import br.com.sapiencia.command.configurations.security.JwtService
 import br.com.sapiencia.command.database.repository.data.CargoJpaRepository
 import br.com.sapiencia.command.database.repository.data.FuncionarioJpaRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.http.HttpMethod.DELETE
 import org.springframework.http.HttpStatus.CREATED
 
 class FuncionarioControllerIT(
     @Autowired private val testRestTemplate: TestRestTemplate,
     @Autowired private val cargoJpaRepository: CargoJpaRepository,
-    @Autowired private val funcionarioJpaRepository: FuncionarioJpaRepository
+    @Autowired private val funcionarioJpaRepository: FuncionarioJpaRepository,
+    @Autowired private val jwtService: JwtService
 ) : IntegrationTests() {
+
+    private lateinit var token: String
+
+    @BeforeEach
+    fun setup() {
+        val cargo = cargoJpaRepository.save(cargoEntity(nome = "AUTH_ONLY"))
+        val funcionario = funcionarioJpaRepository.save(FuncionarioBuilder.funcionarioAuthEntity(cargo = cargo))
+        token = jwtService.generateToken(funcionario).authToken
+    }
 
     @Test
     fun `Deve salvar funcionarios em um mesmo cargo e criar seus logins no banco de dados`() {
@@ -40,16 +55,24 @@ class FuncionarioControllerIT(
             )
         )
 
-        val response = testRestTemplate.postForEntity(BASE_URL, request, FuncionarioResponse::class.java)
-        val response2 = testRestTemplate.postForEntity(BASE_URL, request2, FuncionarioResponse::class.java)
+        val response = testRestTemplate.postForEntity(
+            "$BASE_URL/cadastro",
+            request,
+            FuncionarioResponse::class.java
+        )
+        val response2 = testRestTemplate.postForEntity(
+            "$BASE_URL/cadastro",
+            request2,
+            FuncionarioResponse::class.java
+        )
 
         assertAll(
             { assertEquals(response.statusCode, CREATED) },
             { assertEquals(response2.statusCode, CREATED) },
             { assertNotNull(response.body) },
             { assertNotNull(response2.body) },
-            { assertEquals(cargoJpaRepository.count(), 1) },
-            { assertEquals(funcionarioJpaRepository.count(), 2) }
+            { assertEquals(cargoJpaRepository.count() - 1, 1) },
+            { assertEquals(funcionarioJpaRepository.count() - 1, 2) }
         )
     }
 
@@ -68,14 +91,24 @@ class FuncionarioControllerIT(
             email = "funcionario@teste.com"
         )
 
-        val savedFuncionario = testRestTemplate.postForEntity(BASE_URL, request, FuncionarioResponse::class.java)
-        testRestTemplate.delete("$BASE_URL/${savedFuncionario.body!!.id!!}")
+        val savedFuncionario = testRestTemplate.postForEntity(
+            "$BASE_URL/cadastro",
+            request,
+            FuncionarioResponse::class.java
+        )
+
+        testRestTemplate.exchange(
+            "$BASE_URL/${savedFuncionario.body!!.id!!}",
+            DELETE,
+            httpEntityOf(null, token),
+            Unit::class.java
+        )
 
         assertAll(
             { assertEquals(savedFuncionario.statusCode, CREATED) },
             { assertNotNull(savedFuncionario.body) },
-            { assertEquals(cargoJpaRepository.count(), 1) },
-            { assertEquals(funcionarioJpaRepository.count(), 0) }
+            { assertEquals(cargoJpaRepository.count() - 1, 1) },
+            { assertEquals(funcionarioJpaRepository.count() - 1, 0) }
         )
     }
 

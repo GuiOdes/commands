@@ -4,12 +4,9 @@ import br.com.sapiencia.command.builder.CargoBuilder
 import br.com.sapiencia.command.builder.CargoBuilder.cargoEntity
 import br.com.sapiencia.command.builder.CargoBuilder.criarCargoRequest
 import br.com.sapiencia.command.builder.FuncionarioBuilder.funcionarioEntity
-import br.com.sapiencia.command.common.AuthUtils
 import br.com.sapiencia.command.common.AuthUtils.httpEntityOf
 import br.com.sapiencia.command.common.IntegrationTests
 import br.com.sapiencia.command.configurations.security.JwtService
-import br.com.sapiencia.command.database.entity.Cargo
-import br.com.sapiencia.command.database.entity.Funcionario
 import br.com.sapiencia.command.database.repository.data.CargoJpaRepository
 import br.com.sapiencia.command.database.repository.data.FuncionarioJpaRepository
 import br.com.sapiencia.command.model.CargoModel
@@ -19,8 +16,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod.GET
 import org.springframework.http.HttpMethod.POST
 import org.springframework.http.HttpStatus
@@ -32,14 +27,12 @@ class CargoControllerIT(
     @Autowired private val funcionarioRepository: FuncionarioJpaRepository
 ) : IntegrationTests() {
 
-    private lateinit var funcionario: Funcionario
     private lateinit var token: String
-    private lateinit var cargoAuth: Cargo
 
     @BeforeEach
     fun setupAuth() {
-        cargoAuth = cargoJpaRepository.save(cargoEntity(nome = "AUTH_ONLY"))
-        funcionario = funcionarioRepository.save(funcionarioEntity(cargo = cargoAuth))
+        val cargoAuth = cargoJpaRepository.save(cargoEntity(nome = "AUTH_ONLY"))
+        val funcionario = funcionarioRepository.save(funcionarioEntity(cargo = cargoAuth))
         token = jwtService.generateToken(funcionario).authToken
     }
 
