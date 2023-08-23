@@ -80,8 +80,18 @@ class MesaControllerIT(
         val mesa = mesaJpaRepository.save(MesaBuilder.mesaEntity())
         val mesa2 = mesaJpaRepository.save(MesaBuilder.mesaEntity(id = 2))
         comandaJpaRepository.save(ComandaBuilder.comandaEntity(mesa = mesa2))
-        testRestTemplate.delete("$BASE_URL/${mesa.id}")
-        testRestTemplate.delete("$BASE_URL/${mesa2.id}")
+        testRestTemplate.exchange(
+            "$BASE_URL/${mesa.id}",
+            HttpMethod.DELETE,
+            httpEntityOf(null, token),
+            Unit::class.java
+        )
+        testRestTemplate.exchange(
+            "$BASE_URL/${mesa2.id}",
+            HttpMethod.DELETE,
+            httpEntityOf(null, token),
+            Unit::class.java
+        )
         assertAll(
             { assertTrue(!mesaJpaRepository.existsById(mesa.id)) },
             { assertTrue(mesaJpaRepository.existsById(mesa2.id)) },

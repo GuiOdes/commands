@@ -1,6 +1,5 @@
 package br.com.sapiencia.command.api.controller
 import br.com.sapiencia.command.api.request.AlterarCargoRequest
-import br.com.sapiencia.command.builder.CargoBuilder
 import br.com.sapiencia.command.builder.CargoBuilder.cargoEntity
 import br.com.sapiencia.command.builder.CargoBuilder.criarCargoRequest
 import br.com.sapiencia.command.builder.FuncionarioBuilder.funcionarioEntity
@@ -18,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpMethod.GET
 import org.springframework.http.HttpMethod.POST
+import org.springframework.http.HttpMethod.PUT
 import org.springframework.http.HttpStatus
 
 class CargoControllerIT(
@@ -67,10 +67,11 @@ class CargoControllerIT(
             { Assertions.assertNotNull(response.body) }
         )
     }
+
     @Test
     fun `Deve editar um cargo`() {
         val cargo = cargoJpaRepository.save(
-            CargoBuilder.cargoEntity(
+            cargoEntity(
                 nome = "Garsson"
             )
         )
@@ -78,7 +79,12 @@ class CargoControllerIT(
             id = cargo.id!!,
             nome = "Garçon"
         )
-        testRestTemplate.put(BASE_URL, request, CargoModel::class.java)
+        testRestTemplate.exchange(
+            BASE_URL,
+            PUT,
+            httpEntityOf(request, token),
+            CargoModel::class.java
+        )
         val cargo2 = cargoJpaRepository.findById(cargo.id!!).get()
         assertAll(
             { Assertions.assertEquals(cargo2.nome, request.nome) }
