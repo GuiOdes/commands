@@ -22,7 +22,7 @@ class SecurityConfig(
         .authorizeHttpRequests {
             it
                 .requestMatchers(
-                    "/funcionario/login"
+                    "/funcionario/login", "/funcionario/cadastro"
                 ).permitAll()
                 .anyRequest().authenticated()
         }

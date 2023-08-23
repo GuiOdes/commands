@@ -1,30 +1,53 @@
 package br.com.sapiencia.command.api.controller
 
 import br.com.sapiencia.command.api.response.ProdutoResponse
+import br.com.sapiencia.command.builder.CargoBuilder
+import br.com.sapiencia.command.builder.FuncionarioBuilder
 import br.com.sapiencia.command.builder.ProdutoBuilder.alterarEstoqueProdutoRequest
 import br.com.sapiencia.command.builder.ProdutoBuilder.produtoEntity
 import br.com.sapiencia.command.builder.ProdutoBuilder.produtoRequest
+import br.com.sapiencia.command.common.AuthUtils.httpEntityOf
 import br.com.sapiencia.command.common.IntegrationTests
+import br.com.sapiencia.command.configurations.security.JwtService
+import br.com.sapiencia.command.database.repository.data.CargoJpaRepository
+import br.com.sapiencia.command.database.repository.data.FuncionarioJpaRepository
 import br.com.sapiencia.command.database.repository.data.ProdutoJpaRepository
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.http.HttpMethod.GET
+import org.springframework.http.HttpMethod.POST
+import org.springframework.http.HttpMethod.PUT
 
 class ProdutoControllerIT(
     @Autowired private val produtoJpaRepository: ProdutoJpaRepository,
-    @Autowired private val testRestTemplate: TestRestTemplate
+    @Autowired private val testRestTemplate: TestRestTemplate,
+    @Autowired private val cargoJpaRepository: CargoJpaRepository,
+    @Autowired private val funcionarioJpaRepository: FuncionarioJpaRepository,
+    @Autowired private val jwtService: JwtService,
 ) : IntegrationTests() {
+
+    private lateinit var token: String
+
+    @BeforeEach
+    fun setup() {
+        val cargo = cargoJpaRepository.save(CargoBuilder.cargoEntity(nome = "AUTH_ONLY"))
+        val funcionario = funcionarioJpaRepository.save(FuncionarioBuilder.funcionarioAuthEntity(cargo = cargo))
+        token = jwtService.generateToken(funcionario).authToken
+    }
 
     @Test
     fun `Deve salvar um produto`() {
         produtoJpaRepository.save(produtoEntity())
 
         val request = produtoRequest()
-        val response = testRestTemplate.postForEntity(
+        val response = testRestTemplate.exchange(
             BASE_URL,
-            request,
+            POST,
+            httpEntityOf(request, token),
             ProdutoResponse::class.java
         )
 
@@ -39,8 +62,10 @@ class ProdutoControllerIT(
     @Test
     fun `Deve listar todos os produtos`() {
         val produto = produtoJpaRepository.save(produtoEntity())
-        val response = testRestTemplate.getForEntity(
+        val response = testRestTemplate.exchange(
             BASE_URL,
+            GET,
+            httpEntityOf(null, token),
             Array<ProdutoResponse>::class.java
         )
 
@@ -59,9 +84,11 @@ class ProdutoControllerIT(
 
         val request = alterarEstoqueProdutoRequest(id = produto.id!!)
 
-        testRestTemplate.put(
+        testRestTemplate.exchange(
             BASE_URL,
-            request
+            PUT,
+            httpEntityOf(request, token),
+            ProdutoResponse::class.java
         )
 
         val produtoAtualizado = produtoJpaRepository.findById(produto.id!!).get()
