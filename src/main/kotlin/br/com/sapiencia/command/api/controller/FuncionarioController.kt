@@ -22,7 +22,7 @@ class FuncionarioController(
     @ResponseStatus(HttpStatus.CREATED)
     fun salvar(@RequestBody request: CriarFuncionarioRequest) = funcionarioService.save(request)
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deletar/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deletarPorId(@PathVariable id: UUID) = funcionarioService.deleteById(id)
 }
