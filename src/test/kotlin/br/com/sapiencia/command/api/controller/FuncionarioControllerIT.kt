@@ -2,14 +2,15 @@ package br.com.sapiencia.command.api.controller
 
 import br.com.sapiencia.command.api.FuncionarioResponse
 import br.com.sapiencia.command.builder.CargoBuilder.cargoEntity
-import br.com.sapiencia.command.builder.FuncionarioBuilder
 import br.com.sapiencia.command.builder.FuncionarioBuilder.criarFuncionarioRequest
+import br.com.sapiencia.command.builder.FuncionarioBuilder.funcionarioAuthEntity
 import br.com.sapiencia.command.builder.LoginBuilder.loginRequest
 import br.com.sapiencia.command.common.AuthUtils.httpEntityOf
 import br.com.sapiencia.command.common.IntegrationTests
 import br.com.sapiencia.command.configurations.security.JwtService
 import br.com.sapiencia.command.database.repository.data.CargoJpaRepository
 import br.com.sapiencia.command.database.repository.data.FuncionarioJpaRepository
+import br.com.sapiencia.command.enums.PrivilegioEnum.COMUM
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
@@ -32,7 +33,12 @@ class FuncionarioControllerIT(
     @BeforeEach
     fun setup() {
         val cargo = cargoJpaRepository.save(cargoEntity(nome = "AUTH_ONLY"))
-        val funcionario = funcionarioJpaRepository.save(FuncionarioBuilder.funcionarioAuthEntity(cargo = cargo))
+        val funcionario = funcionarioJpaRepository.save(
+            funcionarioAuthEntity(
+                cargo = cargo,
+                privilegio = COMUM
+            )
+        )
         token = jwtService.generateToken(funcionario).authToken
     }
 
@@ -98,7 +104,7 @@ class FuncionarioControllerIT(
         )
 
         testRestTemplate.exchange(
-            "$BASE_URL/${savedFuncionario.body!!.id!!}",
+            "$BASE_URL/deletar/${savedFuncionario.body!!.id!!}",
             DELETE,
             httpEntityOf(null, token),
             Unit::class.java

@@ -24,7 +24,8 @@ class SecurityConfig(
                 .requestMatchers(
                     "/funcionario/login", "/funcionario/cadastro"
                 ).permitAll()
-                .anyRequest().authenticated()
+                .anyRequest()
+                .authenticated()
         }
         .sessionManagement { it.sessionCreationPolicy(STATELESS) }
         .authenticationProvider(authenticationProvider)
