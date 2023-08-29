@@ -71,7 +71,7 @@ data class Comanda(
         fun of(comandaModel: ComandaModel) = Comanda(
             id = comandaModel.id,
             nomeResponsavel = comandaModel.nomeResponsavel,
-            mesa = Mesa(id = comandaModel.numeroMesa),
+            mesa = Mesa(id = comandaModel.numeroMesa, status = true),
             ativa = comandaModel.ativa,
             dataCriacao = comandaModel.dataCriacao
         )

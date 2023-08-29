@@ -6,4 +6,5 @@ interface MesaRepository {
     fun salvar(mesaModel: MesaModel): MesaModel
     fun procurarPorId(id: Long): MesaModel?
     fun deletarPorID(id: Long)
+    fun existeMesaAtivaPorId(id: Long):Boolean
 }

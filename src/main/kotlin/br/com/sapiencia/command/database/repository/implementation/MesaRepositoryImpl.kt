@@ -14,4 +14,5 @@ class MesaRepositoryImpl(
 
     override fun procurarPorId(id: Long) = mesaJpaRepository.findById(id).orElse(null)?.toModel()
     override fun deletarPorID(id: Long) = mesaJpaRepository.deleteById(id)
+    override fun existeMesaAtivaPorId(id: Long): Boolean = mesaJpaRepository.existsByIdWhereStatusTrue(id)
 }
