@@ -1,7 +1,6 @@
 package br.com.sapiencia.command.model
 
 import br.com.sapiencia.command.api.FuncionarioResponse
-import br.com.sapiencia.command.enums.PrivilegioEnum
 import java.util.UUID
 
 data class FuncionarioModel(
@@ -13,7 +12,6 @@ data class FuncionarioModel(
     val email: String,
     val deletado: Boolean = false,
     val cargo: CargoModel,
-    val privilegio: PrivilegioEnum,
     val login: LoginModel
 ) {
 
@@ -25,7 +23,6 @@ data class FuncionarioModel(
         telefone = this.telefone,
         email = this.email,
         cargo = this.cargo.nome,
-        privilegio = this.privilegio,
         nomeUsuario = this.login.usuario,
     )
 }

@@ -1,6 +1,5 @@
 package br.com.sapiencia.command.api
 
-import br.com.sapiencia.command.enums.PrivilegioEnum
 import java.util.UUID
 
 data class FuncionarioResponse(
@@ -11,6 +10,5 @@ data class FuncionarioResponse(
     val telefone: String,
     val email: String,
     val cargo: String,
-    val privilegio: PrivilegioEnum,
     val nomeUsuario: String
 )
