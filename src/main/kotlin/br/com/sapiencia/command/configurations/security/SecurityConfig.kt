@@ -24,9 +24,8 @@ class SecurityConfig(
                 .requestMatchers(
                     "/funcionario/login", "/funcionario/cadastro"
                 ).permitAll()
-                .requestMatchers("/funcionario/deletar/**")
-                .hasAuthority("ADMIN")
-                .anyRequest().authenticated()
+                .anyRequest()
+                .authenticated()
         }
         .sessionManagement { it.sessionCreationPolicy(STATELESS) }
         .authenticationProvider(authenticationProvider)

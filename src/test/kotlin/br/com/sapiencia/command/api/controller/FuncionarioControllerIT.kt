@@ -2,7 +2,6 @@ package br.com.sapiencia.command.api.controller
 
 import br.com.sapiencia.command.api.FuncionarioResponse
 import br.com.sapiencia.command.builder.CargoBuilder.cargoEntity
-import br.com.sapiencia.command.builder.FuncionarioBuilder
 import br.com.sapiencia.command.builder.FuncionarioBuilder.criarFuncionarioRequest
 import br.com.sapiencia.command.builder.FuncionarioBuilder.funcionarioAuthEntity
 import br.com.sapiencia.command.builder.LoginBuilder.loginRequest
@@ -11,8 +10,6 @@ import br.com.sapiencia.command.common.IntegrationTests
 import br.com.sapiencia.command.configurations.security.JwtService
 import br.com.sapiencia.command.database.repository.data.CargoJpaRepository
 import br.com.sapiencia.command.database.repository.data.FuncionarioJpaRepository
-import br.com.sapiencia.command.enums.PrivilegioEnum
-import br.com.sapiencia.command.enums.PrivilegioEnum.ADMIN
 import br.com.sapiencia.command.enums.PrivilegioEnum.COMUM
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
