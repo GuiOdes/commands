@@ -8,7 +8,6 @@ import br.com.sapiencia.command.builder.LoginBuilder.loginModel
 import br.com.sapiencia.command.database.entity.Cargo
 import br.com.sapiencia.command.database.entity.Funcionario
 import br.com.sapiencia.command.database.entity.Login
-import br.com.sapiencia.command.enums.PrivilegioEnum
 import br.com.sapiencia.command.model.CargoModel
 import br.com.sapiencia.command.model.FuncionarioModel
 import br.com.sapiencia.command.model.LoginModel
@@ -43,7 +42,6 @@ object FuncionarioBuilder {
         email: String = "test@test.com",
         deletado: Boolean = false,
         cargo: CargoModel = cargoModel(),
-        privilegio: PrivilegioEnum = PrivilegioEnum.COMUM,
         login: LoginModel = loginModel()
     ) = FuncionarioModel(
         id = id,
@@ -54,7 +52,6 @@ object FuncionarioBuilder {
         email = email,
         deletado = deletado,
         cargo = cargo,
-        privilegio = privilegio,
         login = login
     )
 
@@ -67,7 +64,6 @@ object FuncionarioBuilder {
         email: String = "test@test.com",
         deletado: Boolean = false,
         cargo: Cargo = cargoEntity(),
-        privilegio: PrivilegioEnum = PrivilegioEnum.COMUM,
         login: Login = loginEntity()
     ) = Funcionario(
         id = id,
@@ -78,7 +74,6 @@ object FuncionarioBuilder {
         email = email,
         deletado = deletado,
         cargo = cargo,
-        privilegio = privilegio,
         login = login
     )
 
@@ -87,7 +82,6 @@ object FuncionarioBuilder {
         nome: String = "Funcionario Teste",
         deletado: Boolean = false,
         cargo: Cargo = cargoEntity(),
-        privilegio: PrivilegioEnum = PrivilegioEnum.COMUM,
         matricula: String = "AUTH",
         telefone: String = "AUTH",
         email: String = "AUTH@AUTH.COM",
@@ -98,7 +92,6 @@ object FuncionarioBuilder {
         nome = nome,
         deletado = deletado,
         cargo = cargo,
-        privilegio = privilegio,
         matricula = matricula,
         telefone = telefone,
         email = email,

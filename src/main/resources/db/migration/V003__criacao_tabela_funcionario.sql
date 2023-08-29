@@ -8,7 +8,6 @@ CREATE TABLE funcionario
     email      VARCHAR        NOT NULL,
     deletado   BOOLEAN        NOT NULL,
     cargo_id   UUID           NOT NULL REFERENCES cargo (id),
-    privilegio VARCHAR        NOT NULL,
     login_id   UUID           NOT NULL REFERENCES login (id)
 );
 
@@ -21,5 +20,4 @@ COMMENT ON COLUMN funcionario.telefone IS 'Telefone do funcionário';
 COMMENT ON COLUMN funcionario.email IS 'Email do funcionário';
 COMMENT ON COLUMN funcionario.deletado IS 'Flag de exclusão lógica do funcionário';
 COMMENT ON COLUMN funcionario.cargo_id IS 'Identificador do cargo do funcionário';
-COMMENT ON COLUMN funcionario.privilegio IS 'Nível de acesso do funcionário';
 COMMENT ON COLUMN funcionario.login_id IS 'Identificador do login do funcionário';

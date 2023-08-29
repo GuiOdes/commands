@@ -1,11 +1,8 @@
 package br.com.sapiencia.command.database.entity
 
 import br.com.sapiencia.command.api.request.CriarFuncionarioRequest
-import br.com.sapiencia.command.enums.PrivilegioEnum
 import br.com.sapiencia.command.model.FuncionarioModel
 import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
@@ -50,9 +47,6 @@ data class Funcionario(
     @JoinColumn(name = "cargo_id")
     val cargo: Cargo,
 
-    @Enumerated(EnumType.STRING)
-    val privilegio: PrivilegioEnum,
-
     @OneToOne
     @JoinColumn(name = "login_id")
     @Cascade(CascadeType.ALL)
@@ -68,7 +62,6 @@ data class Funcionario(
         email = email,
         deletado = deletado,
         cargo = cargo.toModel(),
-        privilegio = privilegio,
         login = login.toModel()
     )
 
@@ -84,7 +77,6 @@ data class Funcionario(
             email = funcionarioModel.email,
             deletado = funcionarioModel.deletado,
             cargo = Cargo.of(funcionarioModel.cargo),
-            privilegio = funcionarioModel.privilegio,
             login = Login.of(funcionarioModel.login)
         )
 
@@ -98,13 +90,12 @@ data class Funcionario(
             telefone = request.telefone,
             email = request.email,
             cargo = cargo,
-            privilegio = PrivilegioEnum.COMUM,
             login = Login.of(request.loginRequest)
         )
     }
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return mutableListOf(SimpleGrantedAuthority(privilegio.name))
+        return mutableListOf(SimpleGrantedAuthority(cargo.nome))
     }
 
     override fun getPassword() = login.senha

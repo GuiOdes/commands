@@ -10,7 +10,6 @@ import br.com.sapiencia.command.common.IntegrationTests
 import br.com.sapiencia.command.configurations.security.JwtService
 import br.com.sapiencia.command.database.repository.data.CargoJpaRepository
 import br.com.sapiencia.command.database.repository.data.FuncionarioJpaRepository
-import br.com.sapiencia.command.enums.PrivilegioEnum.COMUM
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.BeforeEach
@@ -35,8 +34,7 @@ class FuncionarioControllerIT(
         val cargo = cargoJpaRepository.save(cargoEntity(nome = "AUTH_ONLY"))
         val funcionario = funcionarioJpaRepository.save(
             funcionarioAuthEntity(
-                cargo = cargo,
-                privilegio = COMUM
+                cargo = cargo
             )
         )
         token = jwtService.generateToken(funcionario).authToken
