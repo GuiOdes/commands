@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -22,8 +23,9 @@ class ComandaController(
 
     @PostMapping("/inserir-produto")
     fun inserirProduto(
-        @RequestBody inserirProdutoRequest: InserirProdutoRequest
-    ) = comandaService.inserirProduto(inserirProdutoRequest)
+        @RequestBody inserirProdutoRequest: InserirProdutoRequest,
+        @RequestHeader("Authorization") token: String
+    ) = comandaService.inserirProduto(inserirProdutoRequest, token)
 
     @GetMapping("/{mesa}")
     fun procurarAtivaPorMesa(@PathVariable mesa: Long) = comandaService.procurarAtivaPorMesa(mesa)

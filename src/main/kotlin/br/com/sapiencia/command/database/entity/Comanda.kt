@@ -1,9 +1,8 @@
 package br.com.sapiencia.command.database.entity
 
 import br.com.sapiencia.command.api.response.ComandaResponse
-import br.com.sapiencia.command.api.response.ProdutoResponse
+import br.com.sapiencia.command.api.response.ItemComandaResponse
 import br.com.sapiencia.command.model.ComandaModel
-import br.com.sapiencia.command.model.ProdutoModel
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -46,15 +45,13 @@ data class Comanda(
 ) {
     private val valorTotal: BigDecimal get() = listaItens?.sumOf { it.valorTotal } ?: BigDecimal.ZERO
 
-    fun toResponse(
-        listaProdutos: List<ProdutoModel>
-    ) = ComandaResponse(
+    fun toResponse() = ComandaResponse(
         id = id,
         nomeResponsavel = nomeResponsavel,
         numeroMesa = mesa.id,
         ativa = ativa,
         dataCriacao = dataCriacao,
-        listaProdutos = listaProdutos.map { ProdutoResponse.of(it) },
+        listaProdutos = listaItens?.map { ItemComandaResponse.of(it) },
         valorTotal = valorTotal
     )
 

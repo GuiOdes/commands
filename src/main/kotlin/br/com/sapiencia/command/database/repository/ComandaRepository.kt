@@ -9,6 +9,9 @@ interface ComandaRepository {
     fun salvar(comandaModel: ComandaModel): ComandaModel
     fun procurarAtivaPorMesa(mesa: Long): ComandaResponse?
     fun procurarPorPeriodo(dataInicial: LocalDateTime, dataFinal: LocalDateTime): List<ComandaModel>
-    fun inserirProduto(inserirProdutoRequest: InserirProdutoRequest): ComandaResponse
+    fun inserirProduto(
+        inserirProdutoRequest: InserirProdutoRequest,
+        documentoFuncionarioResponsavel: String
+    ): ComandaResponse
     fun existeComandaAtivaPorMesa(mesa: Long): Boolean
 }

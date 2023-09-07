@@ -7,11 +7,5 @@ data class CriarFuncionarioRequest(
     val telefone: String,
     val email: String,
     val cargoName: String,
-    val loginRequest: LoginRequest
-) {
-
-    data class LoginRequest(
-        val usuario: String,
-        val senha: String
-    )
-}
+    val senha: String
+)

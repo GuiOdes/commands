@@ -1,6 +1,6 @@
 package br.com.sapiencia.command.configurations.security
 
-import com.guiodes.template.authentication.AuthenticationResponse
+import br.com.sapiencia.command.api.response.AuthenticationResponse
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm

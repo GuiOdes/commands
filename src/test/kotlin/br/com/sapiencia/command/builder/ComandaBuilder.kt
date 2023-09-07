@@ -52,12 +52,10 @@ object ComandaBuilder {
     fun inserirProdutoRequest(
         comandaId: UUID = UUID.randomUUID(),
         produtoId: UUID = UUID.randomUUID(),
-        quantidade: Int,
-        funcionarioId: UUID = UUID.randomUUID()
+        quantidade: Int
     ) = InserirProdutoRequest(
         comandaId = comandaId,
         produtoId = produtoId,
-        quantidade = quantidade,
-        funcionarioId = funcionarioId
+        quantidade = quantidade
     )
 }

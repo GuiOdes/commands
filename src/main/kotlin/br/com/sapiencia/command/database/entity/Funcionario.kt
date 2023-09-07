@@ -90,7 +90,10 @@ data class Funcionario(
             telefone = request.telefone,
             email = request.email,
             cargo = cargo,
-            login = Login.of(request.loginRequest)
+            login = Login(
+                usuario = request.cpf,
+                senha = request.senha
+            )
         )
     }
 

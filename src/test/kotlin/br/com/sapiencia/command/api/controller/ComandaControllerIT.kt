@@ -7,7 +7,6 @@ import br.com.sapiencia.command.builder.ComandaBuilder
 import br.com.sapiencia.command.builder.ComandaBuilder.comandaEntity
 import br.com.sapiencia.command.builder.ComandaBuilder.comandaRequest
 import br.com.sapiencia.command.builder.FuncionarioBuilder.funcionarioAuthEntity
-import br.com.sapiencia.command.builder.FuncionarioBuilder.funcionarioEntity
 import br.com.sapiencia.command.builder.MesaBuilder.mesaEntity
 import br.com.sapiencia.command.builder.ProdutoBuilder.produtoEntity
 import br.com.sapiencia.command.common.AuthUtils.httpEntityOf
@@ -73,12 +72,9 @@ class ComandaControllerIT(
         val mesaSalva = mesaJpaRepository.save(mesaEntity())
         val comandaSalva = comandaJpaRepository.save(comandaEntity(mesa = mesaSalva))
         val produtoSalvo = produtoJpaRepository.save(produtoEntity())
-        val cargoSalvo = cargoJpaRepository.save(cargoEntity())
-        val funcionarioSalvo = funcionarioJpaRepository.save(funcionarioEntity(cargo = cargoSalvo))
         val request = ComandaBuilder.inserirProdutoRequest(
             comandaId = comandaSalva.id!!,
             produtoId = produtoSalvo.id!!,
-            funcionarioId = funcionarioSalvo.id!!,
             quantidade = 1
         )
 
@@ -91,7 +87,7 @@ class ComandaControllerIT(
 
         assertAll(
             { assertThat(response.body?.listaProdutos?.size).isEqualTo(1) },
-            { assertThat(response.body?.listaProdutos?.first()?.id).isEqualTo(produtoSalvo.id) },
+            { assertThat(response.body?.listaProdutos?.first()?.produtoId).isEqualTo(produtoSalvo.id) },
             {
                 assertThat(response.body?.listaProdutos?.first()?.preco?.toInt()).isEqualTo(produtoSalvo.preco.toInt())
             },

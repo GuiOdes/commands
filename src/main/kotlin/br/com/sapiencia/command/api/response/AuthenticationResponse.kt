@@ -1,4 +1,4 @@
-package com.guiodes.template.authentication
+package br.com.sapiencia.command.api.response
 
 data class AuthenticationResponse(
     val authToken: String,

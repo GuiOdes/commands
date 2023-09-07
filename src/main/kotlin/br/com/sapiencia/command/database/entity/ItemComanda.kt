@@ -1,5 +1,7 @@
 package br.com.sapiencia.command.database.entity
 
+import br.com.sapiencia.command.api.request.InserirProdutoRequest
+import br.com.sapiencia.command.model.ProdutoModel
 import jakarta.persistence.EmbeddedId
 import jakarta.persistence.Entity
 import jakarta.persistence.JoinColumn
@@ -17,9 +19,9 @@ data class ItemComanda(
     @EmbeddedId
     val id: ItemComandaKey,
 
-    val quantidade: Int,
+    var quantidade: Int,
 
-    val deletado: Boolean,
+    val deletado: Boolean = false,
 
     @ManyToOne
     @JoinColumn(name = "funcionario_id")
@@ -30,17 +32,16 @@ data class ItemComanda(
 
     companion object {
         fun of(
-            produto: Produto,
             comanda: Comanda,
-            quantidade: Int,
+            produto: ProdutoModel,
+            inserirProdutoRequest: InserirProdutoRequest,
             funcionario: Funcionario
         ) = ItemComanda(
             id = ItemComandaKey(
                 comanda = comanda,
-                produto = produto
+                produto = Produto.of(produto)
             ),
-            quantidade = quantidade,
-            deletado = false,
+            quantidade = inserirProdutoRequest.quantidade,
             funcionario = funcionario
         )
     }

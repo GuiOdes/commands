@@ -22,14 +22,14 @@ object FuncionarioBuilder {
         telefone: String = "(62)99999-9999",
         email: String = "test@test.com",
         cargoName: String = "Balconista",
-        loginRequest: CriarFuncionarioRequest.LoginRequest = LoginBuilder.loginRequest()
+        senha: String = "123"
     ) = CriarFuncionarioRequest(
         matricula = matricula,
         nome = nome,
         cpf = cpf,
         telefone = telefone,
         email = email,
-        loginRequest = loginRequest,
+        senha = senha,
         cargoName = cargoName,
     )
 
