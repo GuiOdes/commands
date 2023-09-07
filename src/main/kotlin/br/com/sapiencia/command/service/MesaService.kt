@@ -7,4 +7,5 @@ interface MesaService {
     fun salvar(mesaModel: MesaModel): MesaModel
     fun procurarPorId(id: Long): MesaResponse
     fun deletarPorId(id: Long)
+    fun existeMesaAtivaPorId(id: Long): Boolean
 }

@@ -9,15 +9,18 @@ import jakarta.persistence.Table
 @Table(name = "mesa")
 data class Mesa(
     @Id
-    val id: Long
+    val id: Long,
+    val status: Boolean
 ) {
     fun toModel() = MesaModel(
-        id = id
+        id = id,
+        status = status
     )
 
     companion object {
         fun of(mesaModel: MesaModel) = Mesa(
-            id = mesaModel.id
+            id = mesaModel.id,
+            status = mesaModel.status
         )
     }
 }

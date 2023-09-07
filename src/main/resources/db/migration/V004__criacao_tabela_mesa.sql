@@ -1,6 +1,7 @@
 CREATE TABLE mesa
 (
-    id INT NOT NULL PRIMARY KEY
+    id INT NOT NULL PRIMARY KEY,
+    status BOOLEAN NOT NULL
 );
 
 COMMENT ON TABLE mesa IS 'Tabela que armazena as mesas do restaurante';

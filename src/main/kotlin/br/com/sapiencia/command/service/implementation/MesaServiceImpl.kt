@@ -26,4 +26,6 @@ class MesaServiceImpl(
         if (comandaService.existeComandaAtivaPorMesa(id)) throw OperacaoInvalidaException()
         return mesaRepository.deletarPorID(id)
     }
+
+    override fun existeMesaAtivaPorId(id: Long): Boolean = mesaRepository.existeMesaAtivaPorId(id)
 }
