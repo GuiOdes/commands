@@ -1,10 +1,9 @@
 package br.com.sapiencia.command.api.controller
 
-import br.com.sapiencia.command.api.request.MeioPagamentoRequest
-import br.com.sapiencia.command.database.entity.MeioPagamento
 import br.com.sapiencia.command.service.MeioPagamentoService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -18,10 +17,14 @@ class MeioPagamentoController(
 ) {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun salvar(@RequestBody meioPagamentoRequest: MeioPagamentoRequest) = meioPagamentoService.salvar(meioPagamentoRequest)
+    fun salvar(
+        @RequestBody nomeMeioPagamento: String
+    ) = meioPagamentoService.salvar(nomeMeioPagamento)
     @GetMapping
     fun listarTodos() = meioPagamentoService.listarTodos()
 
-    @GetMapping
-    fun listarPorMeioPagamento(@RequestBody meioPagamentoRequest: MeioPagamentoRequest) = meioPagamentoService.listarPorMeioPagamento(meioPagamentoRequest)
+    @GetMapping("/{nome}")
+    fun listarPorMeioPagamento(
+        @PathVariable nome: String
+    ) = meioPagamentoService.procurarPorNome(nome)
 }
