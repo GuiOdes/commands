@@ -1,6 +1,6 @@
 package br.com.sapiencia.command.builder
 
-import br.com.sapiencia.command.api.request.CriarFuncionarioRequest
+import br.com.sapiencia.command.api.request.LoginRequest
 import br.com.sapiencia.command.database.entity.Login
 import br.com.sapiencia.command.model.LoginModel
 import java.util.UUID
@@ -10,7 +10,7 @@ object LoginBuilder {
     fun loginRequest(
         usuario: String = "user",
         senha: String = "pass"
-    ) = CriarFuncionarioRequest.LoginRequest(
+    ) = LoginRequest(
         usuario = usuario,
         senha = senha
     )

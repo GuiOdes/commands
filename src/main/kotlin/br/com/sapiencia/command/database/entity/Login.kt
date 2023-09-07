@@ -1,6 +1,6 @@
 package br.com.sapiencia.command.database.entity
 
-import br.com.sapiencia.command.api.request.CriarFuncionarioRequest
+import br.com.sapiencia.command.api.request.LoginRequest
 import br.com.sapiencia.command.model.LoginModel
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -41,7 +41,7 @@ data class Login(
         )
 
         fun of(
-            loginRequest: CriarFuncionarioRequest.LoginRequest
+            loginRequest: LoginRequest
         ) = Login(
             usuario = loginRequest.usuario,
             senha = loginRequest.senha

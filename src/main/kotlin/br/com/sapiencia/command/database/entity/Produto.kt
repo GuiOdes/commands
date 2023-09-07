@@ -5,6 +5,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import jakarta.validation.constraints.Min
 import org.hibernate.annotations.GenericGenerator
 import java.math.BigDecimal
 import java.util.UUID
@@ -18,6 +19,7 @@ data class Produto(
     val id: UUID? = null,
     val nome: String,
     val preco: BigDecimal,
+    @Min(0)
     val estoque: Long
 ) {
 

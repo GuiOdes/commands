@@ -12,6 +12,7 @@ import br.com.sapiencia.command.database.repository.data.ComandaJpaRepository
 import br.com.sapiencia.command.database.repository.data.FuncionarioJpaRepository
 import br.com.sapiencia.command.database.repository.data.ItemComandaJpaRepository
 import br.com.sapiencia.command.exception.NaoEncontradoException
+import br.com.sapiencia.command.exception.OperacaoInvalidaException
 import br.com.sapiencia.command.model.ComandaModel
 import br.com.sapiencia.command.model.OperacaoProdutoEnum.DIMINUIR
 import org.springframework.stereotype.Component
@@ -45,6 +46,10 @@ class ComandaRepositoryImpl(
 
         val produto = produtoRepository.procurarPorId(inserirProdutoRequest.produtoId)
             ?: throw NaoEncontradoException(Produto::class)
+
+        if (produto.estoque < inserirProdutoRequest.quantidade) {
+            throw OperacaoInvalidaException("Estoque insuficiente")
+        }
 
         val funcionario = funcionarioJpaRepository.findById(inserirProdutoRequest.funcionarioId)
             .orElseThrow { NaoEncontradoException(Funcionario::class) }

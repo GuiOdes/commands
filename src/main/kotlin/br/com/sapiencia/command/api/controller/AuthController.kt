@@ -1,8 +1,9 @@
 package br.com.sapiencia.command.api.controller
 
-import br.com.sapiencia.command.api.request.CriarFuncionarioRequest
+import br.com.sapiencia.command.api.request.LoginRequest
 import br.com.sapiencia.command.service.FuncionarioService
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -13,6 +14,6 @@ class AuthController(
 ) {
 
     @PostMapping
-    fun autenticar(loginRequest: CriarFuncionarioRequest.LoginRequest) = funcionarioService
+    fun autenticar(@RequestBody loginRequest: LoginRequest) = funcionarioService
         .autenticar(loginRequest)
 }

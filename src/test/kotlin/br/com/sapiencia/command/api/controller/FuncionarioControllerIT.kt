@@ -4,7 +4,6 @@ import br.com.sapiencia.command.api.FuncionarioResponse
 import br.com.sapiencia.command.builder.CargoBuilder.cargoEntity
 import br.com.sapiencia.command.builder.FuncionarioBuilder.criarFuncionarioRequest
 import br.com.sapiencia.command.builder.FuncionarioBuilder.funcionarioAuthEntity
-import br.com.sapiencia.command.builder.LoginBuilder.loginRequest
 import br.com.sapiencia.command.common.AuthUtils.httpEntityOf
 import br.com.sapiencia.command.common.IntegrationTests
 import br.com.sapiencia.command.configurations.security.JwtService
@@ -53,10 +52,7 @@ class FuncionarioControllerIT(
             matricula = "123",
             cpf = "792.597.730-24",
             telefone = "(63)99999-9999",
-            loginRequest = loginRequest(
-                usuario = "user2",
-                senha = "pass2"
-            )
+            senha = "pass2"
         )
 
         val response = testRestTemplate.postForEntity(
@@ -86,9 +82,6 @@ class FuncionarioControllerIT(
 
         val request = criarFuncionarioRequest(
             cargoName = cargo.nome,
-            loginRequest = loginRequest(
-                usuario = "funcionario"
-            ),
             matricula = "98u654",
             cpf = "29736688089",
             telefone = "(85)999999999",

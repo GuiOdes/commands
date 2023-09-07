@@ -4,6 +4,7 @@ import br.com.sapiencia.command.database.entity.Produto
 import br.com.sapiencia.command.database.repository.ProdutoRepository
 import br.com.sapiencia.command.database.repository.data.ProdutoJpaRepository
 import br.com.sapiencia.command.exception.NaoEncontradoException
+import br.com.sapiencia.command.exception.OperacaoInvalidaException
 import br.com.sapiencia.command.model.OperacaoProdutoEnum
 import br.com.sapiencia.command.model.OperacaoProdutoEnum.AUMENTAR
 import br.com.sapiencia.command.model.OperacaoProdutoEnum.DIMINUIR
@@ -33,6 +34,10 @@ class ProdutoRepositoryImpl(
             DIMINUIR -> produto.estoque - quantidade
         }
 
-        produtoJpaRepository.save(produto.copy(estoque = novaQuantidade)).toModel()
+        novaQuantidade.takeIf { novoEstoque ->
+            novoEstoque >= 0
+        }?.let {
+            produtoJpaRepository.save(produto.copy(estoque = novaQuantidade)).toModel()
+        } ?: throw OperacaoInvalidaException("Estoque insuficiente")
     } ?: throw NaoEncontradoException(Produto::class)
 }
