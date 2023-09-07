@@ -4,6 +4,7 @@ import br.com.sapiencia.command.api.request.ComandaRequest
 import br.com.sapiencia.command.api.request.InserirProdutoRequest
 import br.com.sapiencia.command.api.request.PeriodoDeDatasRequest
 import br.com.sapiencia.command.api.response.ComandaResponse
+import br.com.sapiencia.command.configurations.security.JwtService
 import br.com.sapiencia.command.database.entity.Comanda
 import br.com.sapiencia.command.database.repository.ComandaRepository
 import br.com.sapiencia.command.exception.NaoEncontradoException
@@ -13,11 +14,22 @@ import org.springframework.stereotype.Service
 
 @Service
 class ComandaServiceImpl(
-    private val comandaRepository: ComandaRepository
+    private val comandaRepository: ComandaRepository,
+    private val jwtService: JwtService
 ) : ComandaService {
     override fun salvar(request: ComandaRequest) = comandaRepository.salvar(request.toModel())
-    override fun inserirProduto(inserirProdutoRequest: InserirProdutoRequest): ComandaResponse {
-        return comandaRepository.inserirProduto(inserirProdutoRequest)
+
+    @Suppress("MagicNumber")
+    override fun inserirProduto(
+        inserirProdutoRequest: InserirProdutoRequest,
+        token: String
+    ): ComandaResponse {
+        val documentoFuncionarioResponsavel = jwtService.extractUsername(token.substring(7))
+
+        return comandaRepository.inserirProduto(
+            inserirProdutoRequest,
+            documentoFuncionarioResponsavel
+        )
     }
     override fun procurarAtivaPorMesa(mesa: Long): ComandaResponse {
         return comandaRepository.procurarAtivaPorMesa(mesa) ?: throw NaoEncontradoException(Comanda::class)

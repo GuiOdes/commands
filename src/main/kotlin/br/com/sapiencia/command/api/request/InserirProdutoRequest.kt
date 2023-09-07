@@ -5,6 +5,5 @@ import java.util.UUID
 data class InserirProdutoRequest(
     val comandaId: UUID,
     val produtoId: UUID,
-    val quantidade: Int,
-    val funcionarioId: UUID
+    val quantidade: Int
 )

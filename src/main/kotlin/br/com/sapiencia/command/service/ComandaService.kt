@@ -8,7 +8,10 @@ import br.com.sapiencia.command.model.ComandaModel
 
 interface ComandaService {
     fun salvar(request: ComandaRequest): ComandaModel
-    fun inserirProduto(inserirProdutoRequest: InserirProdutoRequest): ComandaResponse
+    fun inserirProduto(
+        inserirProdutoRequest: InserirProdutoRequest,
+        token: String
+    ): ComandaResponse
     fun procurarAtivaPorMesa(mesa: Long): ComandaResponse?
     fun procurarPorPeriodo(periodoDeDatasRequest: PeriodoDeDatasRequest): List<ComandaModel>
     fun existeComandaAtivaPorMesa(mesa: Long): Boolean

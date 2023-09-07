@@ -10,7 +10,6 @@ import br.com.sapiencia.command.database.repository.ComandaRepository
 import br.com.sapiencia.command.database.repository.ProdutoRepository
 import br.com.sapiencia.command.database.repository.data.ComandaJpaRepository
 import br.com.sapiencia.command.database.repository.data.FuncionarioJpaRepository
-import br.com.sapiencia.command.database.repository.data.ItemComandaJpaRepository
 import br.com.sapiencia.command.exception.NaoEncontradoException
 import br.com.sapiencia.command.exception.OperacaoInvalidaException
 import br.com.sapiencia.command.model.ComandaModel
@@ -22,25 +21,21 @@ import java.time.LocalDateTime
 class ComandaRepositoryImpl(
     private val comandaJpaRepository: ComandaJpaRepository,
     private val produtoRepository: ProdutoRepository,
-    private val funcionarioJpaRepository: FuncionarioJpaRepository,
-    private val itemComandaJpaRepository: ItemComandaJpaRepository
+    private val funcionarioJpaRepository: FuncionarioJpaRepository
 ) : ComandaRepository {
     override fun salvar(comandaModel: ComandaModel) = comandaJpaRepository.save(Comanda.of(comandaModel)).toModel()
-    override fun procurarAtivaPorMesa(mesa: Long) = comandaJpaRepository.findByMesaIdAndAtivaIsTrue(mesa)
-        .takeIf { it != null }?.let {
-            val listaProdutos = it.listaItens?.map { item ->
-                item.id.produto.toModel()
-            }
-
-            it.toResponse(listaProdutos ?: emptyList())
-        }
+    override fun procurarAtivaPorMesa(mesa: Long) = comandaJpaRepository
+        .findByMesaIdAndAtivaIsTrue(mesa)?.toResponse()
 
     override fun procurarPorPeriodo(dataInicial: LocalDateTime, dataFinal: LocalDateTime): List<ComandaModel> {
         return comandaJpaRepository.findAllByDataCriacaoBetween(dataInicial, dataFinal)
             .map { it.toModel() }
     }
 
-    override fun inserirProduto(inserirProdutoRequest: InserirProdutoRequest): ComandaResponse {
+    override fun inserirProduto(
+        inserirProdutoRequest: InserirProdutoRequest,
+        documentoFuncionarioResponsavel: String
+    ): ComandaResponse {
         val comanda = comandaJpaRepository.findById(inserirProdutoRequest.comandaId)
             .orElseThrow { NaoEncontradoException(Comanda::class) }
 
@@ -51,34 +46,27 @@ class ComandaRepositoryImpl(
             throw OperacaoInvalidaException("Estoque insuficiente")
         }
 
-        val funcionario = funcionarioJpaRepository.findById(inserirProdutoRequest.funcionarioId)
-            .orElseThrow { NaoEncontradoException(Funcionario::class) }
+        val funcionario = funcionarioJpaRepository.findByCpf(documentoFuncionarioResponsavel)
+            ?: throw NaoEncontradoException(Funcionario::class)
 
-        val itemComanda = itemComandaJpaRepository.save(
+        comanda.listaItens?.firstOrNull { it.id.produto.id == produto.id }?.let {
+            it.quantidade += inserirProdutoRequest.quantidade
+        } ?: comanda.listaItens!!.add(
             ItemComanda.of(
-                produto = Produto.of(produto),
                 comanda = comanda,
-                quantidade = inserirProdutoRequest.quantidade,
+                produto = produto,
+                inserirProdutoRequest = inserirProdutoRequest,
                 funcionario = funcionario
             )
         )
 
-        val novaListaProdutos = comanda.listaItens!!.apply { this.add(itemComanda) }
-
-        return comandaJpaRepository.save(
-            comanda.copy(listaItens = novaListaProdutos)
-        ).let { comandaSalva ->
+        return comandaJpaRepository.save(comanda).also {
             produtoRepository.alterarEstoque(
                 inserirProdutoRequest.produtoId,
                 inserirProdutoRequest.quantidade.toLong(),
                 DIMINUIR
             )
-            val listaProdutos = novaListaProdutos.map { item ->
-                item.id.produto.toModel()
-            }
-
-            comandaSalva.toResponse(listaProdutos)
-        }
+        }.toResponse()
     }
 
     override fun existeComandaAtivaPorMesa(mesa: Long): Boolean {
