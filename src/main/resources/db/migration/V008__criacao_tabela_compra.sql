@@ -14,8 +14,14 @@ CREATE TABLE compra
     valor_final    DECIMAL(10, 2) NOT NULL,
     desconto       DECIMAL(3, 2) CHECK (desconto >= 0.0 AND desconto <= 1.0),
     data_compra    TIMESTAMP      NOT NULL,
-    comanda_id     UUID           NOT NULL REFERENCES comanda (id),
-    meio_pagamento INTEGER        NOT NULL REFERENCES meio_pagamento (id)
+    comanda_id     UUID           NOT NULL REFERENCES comanda (id)
+);
+CREATE TABLE pagamento
+(
+    id UUID NOT NULL,
+    valor_pago DECIMAL(10, 2) CHECK(valor_pago > 0.0) NOT NULL,
+    meio_pagamento_id INTEGER Not NULL REFERENCES meio_pagamento (id),
+    compra_id UUID NOT NULL REFERENCES compra(id)
 );
 
 COMMENT ON TABLE compra IS 'Tabela que armazena as compras realizadas';

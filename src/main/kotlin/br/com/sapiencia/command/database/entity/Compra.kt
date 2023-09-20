@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
+import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 import org.hibernate.annotations.CreationTimestamp
@@ -21,7 +22,7 @@ data class Compra (
     @GeneratedValue(generator = "uuid-hibernate-generator")
     @GenericGenerator(name = "uuid-hibernate-generator", strategy = "org.hibernate.id.UUIDGenerator")
     val id:UUID? = null,
-    val valor_final:Double,
+    val valorFinal:Double,
     val desconto:Double,
     @Column(name = "data_criacao")
     @CreationTimestamp
@@ -29,7 +30,9 @@ data class Compra (
     @OneToOne
     @JoinColumn(name = "comanda_id")
     val comanda: Comanda,
-    @ManyToOne
-    @JoinColumn(name = "meio_pagamento")
-    val meioPagamento:MeioPagamento
-)
+    @OneToMany
+    val listaPagamento:MutableList<Pagamento>
+){
+    val valorCompra get() = valorFinal - (valorFinal * desconto)
+    val valorRestante get() = valorFinal - listaPagamento.sumOf {it.valorPago}
+}
