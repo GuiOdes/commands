@@ -34,4 +34,5 @@ class ComandaController(
     fun procurarPorPeriodo(
         periodoDeDatasRequest: PeriodoDeDatasRequest
     ) = comandaService.procurarPorPeriodo(periodoDeDatasRequest)
+
 }

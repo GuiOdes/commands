@@ -15,4 +15,5 @@ interface ComandaService {
     fun procurarAtivaPorMesa(mesa: Long): ComandaResponse?
     fun procurarPorPeriodo(periodoDeDatasRequest: PeriodoDeDatasRequest): List<ComandaModel>
     fun existeComandaAtivaPorMesa(mesa: Long): Boolean
+    fun finalizarComanda()
 }
