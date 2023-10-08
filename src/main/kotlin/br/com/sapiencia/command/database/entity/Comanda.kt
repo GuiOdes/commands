@@ -40,10 +40,19 @@ data class Comanda(
     @CreationTimestamp
     val dataCriacao: LocalDateTime = LocalDateTime.now(),
 
+    @Column(name = "desconto")
+    val desconto: Double,
+
     @OneToMany(mappedBy = "id.comanda", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
-    val listaItens: MutableList<ItemComanda>? = mutableListOf()
+    val listaItens: MutableList<ItemComanda>? = mutableListOf(),
+
+    @OneToMany
+    val listaPagamento: MutableList<Pagamento> = mutableListOf()
 ) {
+
     private val valorTotal: BigDecimal get() = listaItens?.sumOf { it.valorTotal } ?: BigDecimal.ZERO
+    val valorCompra get() = valorTotal - (valorTotal * desconto.toBigDecimal())
+    val valorRestante get() = valorTotal - listaPagamento.sumOf { it.valorPago }
 
     fun toResponse() = ComandaResponse(
         id = id,
@@ -61,6 +70,7 @@ data class Comanda(
         numeroMesa = mesa.id,
         ativa = ativa,
         dataCriacao = dataCriacao,
+        desconto = desconto,
         valorTotal = valorTotal
     )
 
@@ -70,7 +80,8 @@ data class Comanda(
             nomeResponsavel = comandaModel.nomeResponsavel,
             mesa = Mesa(id = comandaModel.numeroMesa, status = true),
             ativa = comandaModel.ativa,
-            dataCriacao = comandaModel.dataCriacao
+            dataCriacao = comandaModel.dataCriacao,
+            desconto = comandaModel.desconto
         )
     }
 }

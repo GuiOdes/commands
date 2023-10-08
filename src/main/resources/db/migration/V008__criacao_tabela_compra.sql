@@ -8,26 +8,17 @@ COMMENT ON TABLE meio_pagamento IS 'Tabela que armazena os meios de pagamento di
 COMMENT ON COLUMN meio_pagamento.id IS 'Identificador único do meio de pagamento';
 COMMENT ON COLUMN meio_pagamento.nome IS 'Nome do meio de pagamento';
 
-CREATE TABLE compra
-(
-    id             UUID           NOT NULL,
-    valor_final    DECIMAL(10, 2) NOT NULL,
-    desconto       DECIMAL(3, 2) CHECK (desconto >= 0.0 AND desconto <= 1.0),
-    data_compra    TIMESTAMP      NOT NULL,
-    comanda_id     UUID           NOT NULL REFERENCES comanda (id)
-);
+
 CREATE TABLE pagamento
 (
     id UUID NOT NULL,
     valor_pago DECIMAL(10, 2) CHECK(valor_pago > 0.0) NOT NULL,
     meio_pagamento_id INTEGER Not NULL REFERENCES meio_pagamento (id),
-    compra_id UUID NOT NULL REFERENCES compra(id)
+    comanda_id UUID NOT NULL REFERENCES comanda(id)
 );
 
-COMMENT ON TABLE compra IS 'Tabela que armazena as compras realizadas';
-COMMENT ON COLUMN compra.id IS 'Identificador único da compra';
-COMMENT ON COLUMN compra.valor_final IS 'Valor final da compra';
-COMMENT ON COLUMN compra.desconto IS 'Desconto aplicado na compra';
-COMMENT ON COLUMN compra.data_compra IS 'Data da compra';
-COMMENT ON COLUMN compra.comanda_id IS 'Identificador único da comanda';
-COMMENT ON COLUMN compra.meio_pagamento IS 'Identificador único do meio de pagamento';
+COMMENT ON TABLE pagamento IS 'Tabela que armazena as pagamentos realizados para comanda especifica';
+COMMENT ON COLUMN pagamento.id IS 'Identificador único de pagamento';
+COMMENT ON COLUMN pagamento.valor_pago IS 'valor pago referente a comanda';
+COMMENT ON COLUMN pagamento.meio_pagamento IS 'Forma de pagamento que foi recebido: PIX, DINHEIRO, CARTÃO e OUTROS';
+COMMENT ON COLUMN pagamento.comanda_id IS 'Indentificar que armazena a comanda que está recebendo esse pagamento';

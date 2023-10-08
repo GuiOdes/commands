@@ -16,6 +16,7 @@ import br.com.sapiencia.command.model.ComandaModel
 import br.com.sapiencia.command.model.OperacaoProdutoEnum.DIMINUIR
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
+import java.util.UUID
 
 @Component
 class ComandaRepositoryImpl(
@@ -71,5 +72,9 @@ class ComandaRepositoryImpl(
 
     override fun existeComandaAtivaPorMesa(mesa: Long): Boolean {
         return comandaJpaRepository.existsByMesaId(mesa)
+    }
+
+    override fun procurarComandaPorId(id: UUID): ComandaModel? {
+        return comandaJpaRepository.findById(id).orElseThrow { NaoEncontradoException(Comanda::class) }.toModel()
     }
 }

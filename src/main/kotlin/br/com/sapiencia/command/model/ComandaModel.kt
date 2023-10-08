@@ -10,5 +10,6 @@ data class ComandaModel(
     val numeroMesa: Long,
     val ativa: Boolean = true,
     val dataCriacao: LocalDateTime = LocalDateTime.now(),
+    var desconto: Double = 0.00,
     val valorTotal: BigDecimal = BigDecimal.ZERO
 )
