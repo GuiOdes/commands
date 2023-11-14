@@ -5,5 +5,5 @@ import br.com.sapiencia.command.model.MeioPagamentoModel
 interface MeioPagamentoRepository {
     fun salvar(nomeMeioPagamento: String): MeioPagamentoModel
     fun listarTodos(): List<MeioPagamentoModel>
-    fun procurarPorNome(nomeMeioPagamento: String): MeioPagamentoModel?
+    fun procurarPorId(id: Long): MeioPagamentoModel?
 }

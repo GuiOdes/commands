@@ -1,5 +1,6 @@
 package br.com.sapiencia.command.database.entity
 
+import br.com.sapiencia.command.model.MeioPagamentoModel
 import br.com.sapiencia.command.model.PagamentoModel
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -21,18 +22,22 @@ data class Pagamento(
     val valorPago: BigDecimal,
     @ManyToOne
     @JoinColumn(name = "meio_pagamento_id")
-    val meioPagamento: MeioPagamento
+    val meioPagamento: MeioPagamento,
+    @ManyToOne
+    val comanda: Comanda
 ) {
     fun toModel() = PagamentoModel(
         id = id,
         valorPago = valorPago,
-        meioPagamento = meioPagamento
+        meioPagamento = meioPagamento.toModel(),
+        comanda = comanda.toModel()
     )
     companion object {
-        fun of(pagamentoModel: PagamentoModel) = Pagamento(
+        fun of(pagamentoModel: PagamentoModel, meioPagamento: MeioPagamento, comanda: Comanda) = Pagamento(
             id = pagamentoModel.id,
             valorPago = pagamentoModel.valorPago,
-            meioPagamento = pagamentoModel.meioPagamento
+            meioPagamento = meioPagamento,
+            comanda = comanda
         )
     }
 }

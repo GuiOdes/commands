@@ -17,4 +17,5 @@ interface ComandaService {
     fun procurarPorPeriodo(periodoDeDatasRequest: PeriodoDeDatasRequest): List<ComandaModel>
     fun existeComandaAtivaPorMesa(mesa: Long): Boolean
     fun procurarComandaPorId(id: UUID): ComandaModel?
+    fun editarComanda(comandaModel: ComandaModel):ComandaModel
 }

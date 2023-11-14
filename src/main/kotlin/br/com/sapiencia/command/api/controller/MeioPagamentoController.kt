@@ -23,8 +23,8 @@ class MeioPagamentoController(
     @GetMapping
     fun listarTodos() = meioPagamentoService.listarTodos()
 
-    @GetMapping("/{nome}")
+    @GetMapping("/{id}")
     fun listarPorMeioPagamento(
-        @PathVariable nome: String
-    ) = meioPagamentoService.procurarPorNome(nome)
+        @PathVariable id: Long
+    ) = meioPagamentoService.procurarPorId(id)
 }

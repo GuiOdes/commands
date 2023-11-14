@@ -1,6 +1,7 @@
 package br.com.sapiencia.command.api.controller
 
 import br.com.sapiencia.command.api.request.AlterarDescontoRequest
+import br.com.sapiencia.command.api.request.PagarRequest
 import br.com.sapiencia.command.model.ComandaModel
 import br.com.sapiencia.command.model.PagamentoModel
 import br.com.sapiencia.command.service.CompraService
@@ -20,9 +21,7 @@ class CompraController(
     val pagamentoService: PagamentoService
 ) {
     @PostMapping
-    fun salvar(@RequestBody comandaModel: ComandaModel) = compraService.salvar(comandaModel)
-    @GetMapping("/{compraId}")
-    fun listarCompra(@PathVariable compraId: UUID) = compraService.listarCompra(compraId)
+    fun salvar(@RequestBody pagarRequest: PagarRequest) = compraService.salvar(pagarRequest)
 
     @PostMapping("/pagamento")
     fun adiconarPagamento(@RequestBody pagamentoModel: PagamentoModel): PagamentoModel {

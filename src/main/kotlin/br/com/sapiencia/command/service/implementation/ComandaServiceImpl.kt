@@ -46,4 +46,8 @@ class ComandaServiceImpl(
     override fun procurarComandaPorId(id: UUID): ComandaModel? {
         return comandaRepository.procurarComandaPorId(id)
     }
+
+    override fun editarComanda(comandaModel: ComandaModel): ComandaModel {
+        return comandaRepository.salvar(comandaModel)
+    }
 }

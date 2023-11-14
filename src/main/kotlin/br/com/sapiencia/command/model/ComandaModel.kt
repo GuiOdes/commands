@@ -8,8 +8,13 @@ data class ComandaModel(
     val id: UUID? = null,
     val nomeResponsavel: String,
     val numeroMesa: Long,
-    val ativa: Boolean = true,
+    var ativa: Boolean = true,
     val dataCriacao: LocalDateTime = LocalDateTime.now(),
     var desconto: Double = 0.00,
-    val valorTotal: BigDecimal = BigDecimal.ZERO
-)
+    val listaItens: List<ItemComandaModel>?,
+    val valorTotal: BigDecimal,
+    val valorPago: BigDecimal
+) {
+    private val valorCompra get() = valorTotal - (valorTotal * desconto.toBigDecimal())
+    fun getValorCompra():BigDecimal =  valorCompra
+}

@@ -2,6 +2,7 @@ package br.com.sapiencia.command.service.implementation
 
 import br.com.sapiencia.command.api.request.AlterarDescontoRequest
 import br.com.sapiencia.command.database.repository.ComandaRepository
+import br.com.sapiencia.command.database.repository.PagamentoRepository
 import br.com.sapiencia.command.model.ComandaModel
 import br.com.sapiencia.command.model.PagamentoModel
 import br.com.sapiencia.command.service.ComandaService
@@ -12,15 +13,15 @@ import org.springframework.stereotype.Service
 class PagamentoServiceImpl(
 
     private val comandaService: ComandaService,
-    private val comandaRepository: ComandaRepository
+    private val pagamentoRepository: PagamentoRepository
 ) : PagamentoService {
     override fun adicionarPagamento(pagamentoModel: PagamentoModel): PagamentoModel {
-        TODO("Not yet implemented")
+        return pagamentoRepository.salvar(pagamentoModel)
     }
 
     override fun editarDesconto(alterarDescontoRequest: AlterarDescontoRequest): ComandaModel {
         var comandaModel = comandaService.procurarComandaPorId(alterarDescontoRequest.comanda)
         comandaModel!!.desconto = alterarDescontoRequest.desconto
-        return comandaRepository.salvar(comandaModel)
+        return comandaService.editarComanda(comandaModel)
     }
 }

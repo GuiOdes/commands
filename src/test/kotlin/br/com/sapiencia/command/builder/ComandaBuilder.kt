@@ -34,7 +34,7 @@ object ComandaBuilder {
         nomeResponsavel: String = "Roberto",
         mesa: Mesa = MesaBuilder.mesaEntity(),
         ativa: Boolean = true,
-        dataCriacao: LocalDateTime = LocalDateTime.now(),
+        dataCriacao: LocalDateTime = LocalDateTime.now()
     ) = Comanda(
         id = id,
         nomeResponsavel = nomeResponsavel,

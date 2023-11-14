@@ -30,6 +30,7 @@ data class ItemComanda(
     val valorTotal: BigDecimal
         get() = id.produto.preco * BigDecimal(quantidade)
 
+
     companion object {
         fun of(
             comanda: Comanda,
