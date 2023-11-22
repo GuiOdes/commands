@@ -6,7 +6,6 @@ import br.com.sapiencia.command.model.ComandaModel
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
@@ -44,13 +43,11 @@ data class Comanda(
     val desconto: Double,
 
     @OneToMany(mappedBy = "id.comanda", cascade = [CascadeType.ALL])
-    val listaItens: List<ItemComanda>? = listOf(),
+    val listaItens: MutableList<ItemComanda>?,
 
     @OneToMany
     val listaPagamento: List<Pagamento>? = listOf()
 ) {
-    val valorTotal get() = listaItens?.sumOf { it.valorTotal } ?: BigDecimal.ZERO
-    val valorPago get() = listaPagamento?.sumOf { it.valorPago } ?: BigDecimal.ZERO
 
     fun toResponse() = ComandaResponse(
         id = id,
@@ -59,8 +56,8 @@ data class Comanda(
         ativa = ativa,
         dataCriacao = dataCriacao,
         listaProdutos = listaItens?.map { ItemComandaResponse.of(it) },
-        valorTotal = valorTotal,
-        valorPago = valorPago
+        desconto = desconto,
+        listaPagamento = listaPagamento?.map { it.toModel() }
     )
 
     fun toModel() = ComandaModel(
@@ -70,8 +67,8 @@ data class Comanda(
         ativa = ativa,
         dataCriacao = dataCriacao,
         desconto = desconto,
-        valorTotal = valorTotal,
-        valorPago = valorPago
+        listaItens = listaItens,
+        listaPagamento = listaPagamento
     )
 
     companion object {
@@ -81,7 +78,8 @@ data class Comanda(
             mesa = Mesa(id = comandaModel.numeroMesa, status = true),
             ativa = comandaModel.ativa,
             dataCriacao = comandaModel.dataCriacao,
-            desconto = comandaModel.desconto
+            desconto = comandaModel.desconto,
+            listaItens = null
         )
     }
 }

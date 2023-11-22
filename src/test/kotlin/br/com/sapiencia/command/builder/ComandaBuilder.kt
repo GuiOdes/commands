@@ -18,7 +18,6 @@ object ComandaBuilder {
         ativa: Boolean = true,
         dataCriacao: LocalDateTime = LocalDateTime.now(),
         desconto: Double = 0.00,
-        valorTotal: BigDecimal = BigDecimal.ZERO
     ) = ComandaModel(
         id = id,
         nomeResponsavel = nomeResponsavel,
@@ -26,7 +25,8 @@ object ComandaBuilder {
         ativa = ativa,
         dataCriacao = dataCriacao,
         desconto = desconto,
-        valorTotal = valorTotal
+        listaItens = null,
+        listaPagamento = null
     )
 
     fun comandaEntity(
@@ -41,7 +41,9 @@ object ComandaBuilder {
         mesa = mesa,
         ativa = ativa,
         dataCriacao = dataCriacao,
-        desconto = 0.00
+        desconto = 0.00,
+        listaItens = null,
+        listaPagamento = null
     )
 
     fun comandaRequest(
