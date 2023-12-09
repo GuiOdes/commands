@@ -11,6 +11,7 @@ import br.com.sapiencia.command.exception.NaoEncontradoException
 import br.com.sapiencia.command.model.ComandaModel
 import br.com.sapiencia.command.service.ComandaService
 import org.springframework.stereotype.Service
+import java.util.UUID
 
 @Service
 class ComandaServiceImpl(
@@ -40,5 +41,13 @@ class ComandaServiceImpl(
 
     override fun existeComandaAtivaPorMesa(mesa: Long): Boolean {
         return comandaRepository.existeComandaAtivaPorMesa(mesa)
+    }
+
+    override fun procurarComandaPorId(id: UUID): ComandaModel? {
+        return comandaRepository.procurarComandaPorId(id)
+    }
+
+    override fun editarComanda(comandaModel: ComandaModel): ComandaModel {
+        return comandaRepository.salvar(comandaModel)
     }
 }

@@ -17,14 +17,16 @@ object ComandaBuilder {
         numeroMesa: Long = 1,
         ativa: Boolean = true,
         dataCriacao: LocalDateTime = LocalDateTime.now(),
-        valorTotal: BigDecimal = BigDecimal.ZERO
+        desconto: Double = 0.00,
     ) = ComandaModel(
         id = id,
         nomeResponsavel = nomeResponsavel,
         numeroMesa = numeroMesa,
         ativa = ativa,
         dataCriacao = dataCriacao,
-        valorTotal = valorTotal
+        desconto = desconto,
+        listaItens = null,
+        listaPagamento = null
     )
 
     fun comandaEntity(
@@ -32,13 +34,16 @@ object ComandaBuilder {
         nomeResponsavel: String = "Roberto",
         mesa: Mesa = MesaBuilder.mesaEntity(),
         ativa: Boolean = true,
-        dataCriacao: LocalDateTime = LocalDateTime.now(),
+        dataCriacao: LocalDateTime = LocalDateTime.now()
     ) = Comanda(
         id = id,
         nomeResponsavel = nomeResponsavel,
         mesa = mesa,
         ativa = ativa,
-        dataCriacao = dataCriacao
+        dataCriacao = dataCriacao,
+        desconto = 0.00,
+        listaItens = null,
+        listaPagamento = null
     )
 
     fun comandaRequest(

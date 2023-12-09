@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.util.UUID
 
 @RestController
 @RequestMapping("/comanda")
@@ -27,9 +28,10 @@ class ComandaController(
         @RequestHeader("Authorization") token: String
     ) = comandaService.inserirProduto(inserirProdutoRequest, token)
 
-    @GetMapping("/{mesa}")
+    @GetMapping("/mesa/{mesa}")
     fun procurarAtivaPorMesa(@PathVariable mesa: Long) = comandaService.procurarAtivaPorMesa(mesa)
-
+    @GetMapping("/comanda/{id}")
+    fun procurarComandaPorID(@PathVariable id: UUID) = comandaService.procurarComandaPorId(id)
     @GetMapping("/periodo")
     fun procurarPorPeriodo(
         periodoDeDatasRequest: PeriodoDeDatasRequest

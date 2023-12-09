@@ -11,7 +11,7 @@ class MeioPagamentoServiceImpl(
 ) : MeioPagamentoService {
     override fun salvar(nomeMeioPagamento: String) = repository.salvar(nomeMeioPagamento)
     override fun listarTodos(): List<MeioPagamentoModel> = repository.listarTodos()
-    override fun procurarPorNome(nomeMeioPagamento: String): MeioPagamentoModel? {
-        return repository.procurarPorNome(nomeMeioPagamento)
+    override fun procurarPorId(id: Long): MeioPagamentoModel? {
+        return repository.procurarPorId(id)
     }
 }

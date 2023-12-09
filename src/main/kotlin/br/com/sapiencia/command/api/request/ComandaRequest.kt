@@ -1,6 +1,7 @@
 package br.com.sapiencia.command.api.request
 
 import br.com.sapiencia.command.model.ComandaModel
+import java.math.BigDecimal
 
 class ComandaRequest(
     val nomeResponsavel: String,
@@ -8,6 +9,8 @@ class ComandaRequest(
 ) {
     fun toModel() = ComandaModel(
         nomeResponsavel = nomeResponsavel,
-        numeroMesa = numeroMesa
+        numeroMesa = numeroMesa,
+        listaItens = null,
+        listaPagamento = null
     )
 }
