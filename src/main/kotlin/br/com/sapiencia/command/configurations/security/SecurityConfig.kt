@@ -22,7 +22,11 @@ class SecurityConfig(
         .authorizeHttpRequests {
             it
                 .requestMatchers(
-                    "/funcionario/login", "/funcionario/cadastro", "/auth"
+                    "/funcionario/login",
+                    "/funcionario/cadastro",
+                    "/auth",
+                    "/v3/api-docs/**",
+                    "/swagger-ui/**"
                 ).permitAll()
                 .anyRequest()
                 .authenticated()
